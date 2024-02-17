@@ -59,7 +59,7 @@
     -->
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item">
-        <a href="#" class="nav-link text-white">
+        <a href="../admin/dashboard.php" class="nav-link text-white">
           <i class="bi pe-none me-2 fa-solid fa-house"></i>
           Dashboard
         </a>
@@ -71,7 +71,7 @@
         </a>
       </li>
       <li>
-        <a href="#" class="nav-link text-white">
+        <a href="../admin/student.php" class="nav-link text-white">
           <i class="bi pe-none me-2 fa-solid fa-user-graduate"></i>
           Students
         </a>

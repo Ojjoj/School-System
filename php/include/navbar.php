@@ -43,7 +43,7 @@
               </a>
             </li>
             <li>
-              <a href="#" class="nav-link text-white">
+              <a href="../admin/login.php" class="nav-link text-white">
                 <i class="bi d-block mx-auto mb-1 fa-solid fa-power-off"></i>
                 Logout
               </a>
