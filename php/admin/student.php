@@ -1,5 +1,34 @@
 <?php
-include '../include/navbar.php';
+include_once '../include/connect.php';
+session_start();
+
+$studentsPerPage = 5;
+$page = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
+$offset = ($page - 1) * $studentsPerPage;
+
+
+$sql = "SELECT student_id, first_name, last_name, date_of_birth, gender, country FROM student LIMIT $offset, $studentsPerPage";
+$sql_total_students = "SELECT COUNT(*) AS total FROM student";
+
+if ($stmt = mysqli_prepare($connection, $sql)) {
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+} else {
+    echo "Error in preparing SQL statement: " . mysqli_error($connection);
+}
+
+if (isset($_GET['delete'])) {
+
+    $delete_id = $_GET['delete'];
+
+    $sql = "DELETE FROM student WHERE student_id = $delete_id";
+    mysqli_query($connection, $sql);
+
+    header('location:student.php');
+}
+
+?>
+
 ?>
 
 <!DOCTYPE html>
@@ -8,21 +37,52 @@ include '../include/navbar.php';
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap Simple Data Table</title>
+    <title>Student</title>
     <link href="../../external/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="../../external/fontawesome/css/all.min.css" rel="sylesheet">
     <link href="../../external/fontawesome/css/fontawesome.min.css" rel="sylesheet">
     <link href="../../css/student.css" rel="stylesheet">
-    <style>
-    </style>
 </head>
+
+<?php
+include '../include/navbar.php';
+?>
 
 <body>
     <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-2">
             <?php include '../include/sidebar.php'; ?>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-10">
+            <div class="container mt-3">
+                <?php
+                if ($result) {
+                    $resultTotalStudents = mysqli_query($connection, $sql_total_students);
+                    $rowTotalStudents = mysqli_fetch_assoc($resultTotalStudents);
+                    $total_students = $rowTotalStudents['total'];
+                    mysqli_free_result($resultTotalStudents);
+                    mysqli_close($connection);
+
+                    echo '<div class="row">
+                    <div class="col-md-6">
+                        <h5><b>Year</b></h5>
+                        <select class="form-select">
+                            <option selected="">All</option>
+                            <option value="1">2023-2024</option>
+                            <option value="2">2022-2023</option>
+                            <option value="3">2021-2022</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <h5><b>Availability</b></h5>
+                        <select class="form-select">
+                            <option selected="">All</option>
+                            <option value="1">Active</option>
+                            <option value="2">Inactive</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
             <div class="table-responsive">
                 <div class="table-wrapper">
                     <div class="table-title">
@@ -50,93 +110,79 @@ include '../include/navbar.php';
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Thomas Hardy</td>
-                                <td>89 Chiaroscuro Rd.</td>
-                                <td>Portland</td>
-                                <td>97219</td>
-                                <td>USA</td>
-                                <td>
-                                    <a href="#" class="view" title="View" data-toggle="tooltip"><i class="fa-solid fa-eye"></i></a>
-                                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="fa-solid fa-pencil"></i></a>
-                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="fa-solid fa-trash"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>Maria Anders</td>
-                                <td>Obere Str. 57</td>
-                                <td>Berlin</td>
-                                <td>12209</td>
-                                <td>Germany</td>
-                                <td>
-                                    <a href="#" class="view" title="View" data-toggle="tooltip"><i class="fa-solid fa-eye"></i></a>
-                                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="fa-solid fa-pencil"></i></a>
-                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="fa-solid fa-trash"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Fran Wilson</td>
-                                <td>C/ Araquil, 67</td>
-                                <td>Madrid</td>
-                                <td>28023</td>
-                                <td>Spain</td>
-                                <td>
-                                    <a href="#" class="view" title="View" data-toggle="tooltip"><i class="fa-solid fa-eye"></i></a>
-                                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="fa-solid fa-pencil"></i></a>
-                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="fa-solid fa-trash"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>Dominique Perrier</td>
-                                <td>25, rue Lauriston</td>
-                                <td>Paris</td>
-                                <td>75016</td>
-                                <td>France</td>
-                                <td>
-                                    <a href="#" class="view" title="View" data-toggle="tooltip"><i class="fa-solid fa-eye"></i></a>
-                                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="fa-solid fa-pencil"></i></a>
-                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="fa-solid fa-trash"></i></a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>Martin Blank</td>
-                                <td>Via Monte Bianco 34</td>
-                                <td>Turin</td>
-                                <td>10100</td>
-                                <td>Italy</td>
-                                <td>
-                                    <a href="#" class="view" title="View" data-toggle="tooltip"><i class="fa-solid fa-eye"></i></a>
-                                    <a href="#" class="edit" title="Edit" data-toggle="tooltip"><i class="fa-solid fa-pencil"></i></a>
-                                    <a href="#" class="delete" title="Delete" data-toggle="tooltip"><i class="fa-solid fa-trash"></i></a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="clearfix">
-                        <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-                        <ul class="pagination">
-                            <li class="page-item disabled"><a href="#"><i class="fa fa-angle-double-left"></i></a></li>
-                            <li class="page-item"><a href="#" class="page-link">1</a></li>
-                            <li class="page-item"><a href="#" class="page-link">2</a></li>
-                            <li class="page-item active"><a href="#" class="page-link">3</a></li>
-                            <li class="page-item"><a href="#" class="page-link">4</a></li>
-                            <li class="page-item"><a href="#" class="page-link">5</a></li>
-                            <li class="page-item"><a href="#" class="page-link"><i class="fa fa-angle-double-right"></i></a></li>
-                        </ul>
-                    </div>
+                        <tbody>';
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $student_id = $row['student_id'];
+                        $first_name = $row['first_name'];
+                        $last_name = $row['last_name'];
+                        $date_of_birth = $row['date_of_birth'];
+                        $gender = $row['gender'];
+                        $country = $row['country'];
+                        echo "<tr>";
+                        echo "<td>$student_id</td>";
+                        echo "<td>$first_name</td>";
+                        echo "<td>$last_name</td>";
+                        echo "<td>$date_of_birth</td>";
+                        echo "<td>$gender</td>";
+                        echo "<td>$country</td>";
+                        echo "<td>";
+                        echo '   <a href="#" class="view" title="View" name="view" data-toggle="tooltip"><i class="fa-solid fa-eye"></i></a>';
+                        echo '   <a href="edit_student.php?edit=' . $student_id . '" class="edit" title="Edit" name="edit" data-toggle="tooltip"><i class="fa-solid fa-pencil"></i></a>';
+                        echo '   <a href="student.php?delete=' . $student_id . '" class="delete" title="Delete" name="delete" data-toggle="tooltip" onclick="return confirm(\'Delete this student?\');"><i class="fa-solid fa-trash"></i></a>';
+
+                        echo "</td>";
+                        echo "</tr>";
+                    }
+                    echo '  </tbody>';
+                    echo '</table>';
+
+                    $totalPages = ceil($total_students / $studentsPerPage);
+                    $current_entries_start = min($total_students, $offset + 1);
+                    $current_entries_end = min($total_students, $offset + $studentsPerPage);
+
+                    if ($current_entries_end < $offset + $studentsPerPage) {
+                        $studentsPerPage = $current_entries_end - $offset;
+                    }
+
+                    echo "<div class='clearfix'>";
+                    echo "<div class='hint-text'>Showing <b>$studentsPerPage</b> out of <b>$total_students</b> entries</div>";
+                    echo "<ul class='pagination'>";
+                    echo "<li class='page-item ";
+                    if ($page == 1) {
+                        echo "disabled";
+                    }
+                    echo "'><a href='";
+                    if ($page > 1) {
+                        echo "?page=" . ($page - 1);
+                    }
+                    echo "'><i class='fa fa-angle-double-left'></i></a></li>";
+                    for ($i = 1; $i <= $totalPages; $i++) {
+                        if ($i == $page) {
+                            echo "<li class='page-item active'><a href='#' class='page-link'>$i</a></li>";
+                        } else {
+                            echo "<li class='page-item'><a href='?page=$i' class='page-link'>$i</a></li>";
+                        }
+                    }
+                    echo "<li class='page-item ";
+                    if ($page == $totalPages || $totalPages == 0) {
+                        echo "disabled";
+                    }
+                    echo "'><a href='";
+                    if ($page < $totalPages) {
+                        echo "?page=" . ($page + 1);
+                    }
+                    echo "'><i class='fa fa-angle-double-right'></i></a></li>";
+                    echo "</ul>";
+                    echo "</div>";
+                } else {
+                    echo "Error: " . mysqli_error($connection);
+                }
+                ?>
+                <div class="text-center">
+                    <a href="add_student.php" class="btn btn-primary rounded-pill px-3">Add Student</a>
                 </div>
             </div>
-            <div class="text-center">
-                <button class="btn btn-primary rounded-pill px-3" type="button">Add Student</button>
-            </div>
         </div>
-    </div>
 </body>
 
 </html>

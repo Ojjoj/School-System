@@ -1,34 +1,41 @@
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="../../external/bootstrap/bootstrap.min.css" rel="stylesheet">
-    <link href="../../external/fontawesome/css/all.min.css" rel="stylesheet">
-    <link href="../../external/fontawesome/css/fontawesome.min.css" rel="stylesheet">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <style>
-      .bi {
-        vertical-align: -.125em;
-        text-align: center;
-        fill: currentColor;
-        border-radius: 10px;
-      }
-      .nav-link:hover {
-        background-color: black; 
-      } 
-      .nav-link{
-        border-radius: 10px;
-      }
+  <link href="../../external/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link href="../../external/fontawesome/css/all.min.css" rel="stylesheet">
+  <link href="../../external/fontawesome/css/fontawesome.min.css" rel="stylesheet">
 
-    </style>
-    <!-- Custom styles for this template -->
-  </head>
-  <body>
+  <style>
+    body {
+      padding-top: 70px;
+    }
+
+    .bi {
+      vertical-align: -.125em;
+      text-align: center;
+      fill: currentColor;
+      border-radius: 10px;
+    }
+
+    .nav-link:hover {
+      background-color: black;
+    }
+
+    .nav-link {
+      border-radius: 10px;
+    }
+  </style>
+  <!-- Custom styles for this template -->
+</head>
+
+<body>
 
   <header>
-    <div class="px-3 py-2 text-bg-dark">
+    <div class="px-3 py-2 text-bg-dark fixed-top">
       <div class="container">
         <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
           <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
@@ -51,7 +58,7 @@
           </ul>
         </div>
       </div>
-    </div>
   </header>
-    </body>
+</body>
+
 </html>
