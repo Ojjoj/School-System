@@ -1,4 +1,6 @@
 <?php
+include_once '../include/admin_checkout.php'; 
+
 session_start();
 
 if(isset($_POST['submit'])){

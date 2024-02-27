@@ -1,4 +1,6 @@
 <?php
+include_once '../include/admin_checkout.php'; 
+
 include '../include/navbar.php';
 include '../include/sidebar.php';
 ?>

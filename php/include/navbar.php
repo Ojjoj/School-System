@@ -1,3 +1,19 @@
+<?php
+
+  if(isset($_GET['admin'])){
+    session_start();
+    $username=$_SESSION['username'];
+    if($username === 'saadeyiarazan@gmail.com'){
+      header("location:../admin/main_admin_profile.php");
+      exit();
+    }
+    else{
+      header("location:../admin/admin_profile.php");
+      exit();
+    }
+
+  }
+?>
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
 
@@ -44,7 +60,7 @@
 
           <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0">
             <li>
-              <a href="#" class="nav-link text-white">
+              <a href="../include/navbar.php?admin=true" class="nav-link text-white">
                 <i class="bi d-block mx-auto mb-1 fa-solid fa-user"></i>
                 Profile
               </a>

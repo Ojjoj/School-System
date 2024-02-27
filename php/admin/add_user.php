@@ -1,4 +1,6 @@
 <?php
+include_once '../include/admin_checkout.php'; 
+
 if(isset($_POST['add'])){
     include_once '../include/connect.php';
 

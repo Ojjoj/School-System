@@ -1,7 +1,8 @@
 <?php
-session_start();
-if(isset($_SESSION['username']) && $_SESSION['username'] !== 'saadeyiarazan@gmail.com'){
-    header("location:dmin_profile.php");
+include_once '../include/admin_checkout.php'; 
+
+if(isset($_SESSION['username']) && $_SESSION['username'] !== 'karamkassem11@gmail.com'){
+    header("location:admin_profile.php");
     exit();
 }
 
@@ -191,8 +192,8 @@ if (isset($_GET['delete'])) {
                             <td>' . $data["last_name"] . '</td>
                             <td>' . $data["username"] . '</td>'. 
                             '<td>
-                                <a href="add_user.php"><i class="fa-solid fa-pencil edit"></i></a>
-                                <a href="main_admin_profile.php?delete='.$data["id"].'"><i class="fa-solid fa-trash delete"></i></a>
+                            <a href="edit_admin.php?edit='.$data["id"].'" title="Edit" data-toggle="tooltip"><i class="fa-solid fa-pencil edit"></i></a>
+                            <a href="main_admin_profile.php?delete='.$data["id"].'" title="Delete" data-toggle="tooltip" onclick="return confirm(\'Are you sure you want to delete this admin?\');"><i class="fa-solid fa-trash delete"></i></a>
                             </td>
                         </tr>';
                         

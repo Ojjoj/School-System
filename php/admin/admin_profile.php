@@ -1,8 +1,12 @@
 <?php
-session_start();
+include_once '../include/admin_checkout.php'; 
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 if(isset($_POST['update'])){
-    require_once 'connection.php';
+    include_once '../include/connect.php';
 
     $username = $_SESSION['username'];
     echo $username;
