@@ -33,7 +33,7 @@ if(isset($_POST['edit'])){
     <link rel="stylesheet" href="../../external/bootstrap/bootstrap.min.css" >
     <link rel="sylesheet"  href="../../external/fontawesome/css/all.min.css">
     <link rel="sylesheet"  href="../../external/fontawesome/css/fontawesome.min.css">
-    <link rel="stylesheet" href="../../css/login.css">
+    <link rel="stylesheet" href="../../css/logina.css">
 </head>
 <body>
     <div class="container">

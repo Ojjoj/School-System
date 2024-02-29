@@ -1,9 +1,7 @@
 <?php
 include_once '../include/admin_checkout.php'; 
 
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
+$check_password = false;
 
 if(isset($_POST['update'])){
     include_once '../include/connect.php';
@@ -43,12 +41,6 @@ if(isset($_POST['update'])){
     }
 }
 
-else{
-    header("location:login.php");
-    exit();
-}
-
-
 if($check_password){
     $hashed_password = password_hash($new_password, PASSWORD_ARGON2ID);
     $sql = "UPDATE users set passwrd=? WHERE username=?";
@@ -75,7 +67,7 @@ if($check_password){
     <link rel="stylesheet" href="../../external/bootstrap/bootstrap.min.css" >
     <link rel="sylesheet"  href="../../external/fontawesome/css/all.min.css">
     <link rel="sylesheet"  href="../../external/fontawesome/css/fontawesome.min.css">
-    <link rel="stylesheet" href="../../css/login.css">
+    <link rel="stylesheet" href="../../css/logina.css">
 </head>
 <body>
     <div class="container">

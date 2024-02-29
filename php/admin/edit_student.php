@@ -2,7 +2,6 @@
 include_once '../include/admin_checkout.php'; 
 
 include_once '../include/connect.php';
-session_start();
 
 $alert = 'd-none';
 if (isset($_POST['submit']) && isset($_GET['edit'])) {

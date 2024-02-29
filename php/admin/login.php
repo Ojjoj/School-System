@@ -1,26 +1,21 @@
 <?php
-include_once '../include/admin_checkout.php'; 
-
-session_start();
-
 if(isset($_POST['submit'])){
     include_once '../include/connect.php';
 
     $username = strtolower($_POST['username']);
     $password = $_POST['password'];
-    echo "1";  
     $sql = "SELECT id, username, passwrd FROM users WHERE username = ?";
     if($stmt = mysqli_prepare($connection, $sql)){
         mysqli_stmt_bind_param($stmt, "s", $username);
         if(mysqli_stmt_execute($stmt)){
             mysqli_stmt_store_result($stmt);
             if(mysqli_stmt_num_rows($stmt) == 1){
-              echo "ghjk";  
                 mysqli_stmt_bind_result($stmt, $id, $username, $hashed_password);
                 if(mysqli_stmt_fetch($stmt)){
                     if(password_verify($password, $hashed_password)){
+                        session_start();
                         $_SESSION["username"] = $username;                         
-                        header("location:main_admin_profile.php");
+                        header("location:dashboard.php");
                     } 
                     else{
                         $login_error = "Invalid username or password";
@@ -44,7 +39,7 @@ if(isset($_POST['submit'])){
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="stylesheet" href="../../external/bootstrap/bootstrap.min.css">
-    <link rel="stylesheet" href="../../css/login.css">
+    <link rel="stylesheet" href="../../css/logina.css">
 </head>
 <body>
     <div class="container">

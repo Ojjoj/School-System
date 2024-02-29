@@ -3,7 +3,7 @@
   if(isset($_GET['admin'])){
     session_start();
     $username=$_SESSION['username'];
-    if($username === 'saadeyiarazan@gmail.com'){
+    if($username === 'johndeo@gmail.com'){
       header("location:../admin/main_admin_profile.php");
       exit();
     }
@@ -11,7 +11,12 @@
       header("location:../admin/admin_profile.php");
       exit();
     }
+  }
 
+  if(isset($_GET['logout'])){
+    session_destroy();
+    header('location:../admin/add_user.php');
+    exit();
   }
 ?>
 <!doctype html>
@@ -66,7 +71,7 @@
               </a>
             </li>
             <li>
-              <a href="../admin/login.php" class="nav-link text-white">
+              <a href="../admin/login.php?logout=true" class="nav-link text-white">
                 <i class="bi d-block mx-auto mb-1 fa-solid fa-power-off"></i>
                 Logout
               </a>
