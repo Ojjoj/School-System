@@ -11,7 +11,7 @@ $username = $_SESSION['username'];
 include_once '../include/connect.php';
 
 // select data for the admin
-$sql = "SELECT * FROM users WHERE username = ?";
+$sql = "SELECT * FROM admins WHERE username = ?";
 if ($stmt = mysqli_prepare($connection, $sql)) {
     mysqli_stmt_bind_param($stmt, "s", $username);
     mysqli_stmt_execute($stmt);
@@ -24,14 +24,16 @@ else {
     echo "Error in preparing SQL statement: " . mysqli_error($connection);
 }
 
+$alert = 'd-none';
 // update personal information
 if(isset($_POST['update'])){
-    $sql = "UPDATE users set first_name=?, last_name=? WHERE username=?";
+    $sql = "UPDATE admins set first_name=?, last_name=? WHERE username=?";
     if($stmt = mysqli_prepare($connection, $sql)){
         mysqli_stmt_bind_param($stmt, "sss", $_POST['first_name'], $_POST['last_name'],$username);
         if(mysqli_stmt_execute($stmt)){
             $first_name = $_POST['first_name'];    
-            $last_name = $_POST['last_name'];  
+            $last_name = $_POST['last_name']; 
+            $alert = '';
         }
         else{
             echo "Oops! Something went wrong. Please try again later.";
@@ -41,7 +43,7 @@ if(isset($_POST['update'])){
 
 // update the password
 if(isset($_POST['update_password'])){
-    $sql3 = "SELECT id, username, passwrd FROM users WHERE username = ?";
+    $sql3 = "SELECT id, username, passwrd FROM admins WHERE username = ?";
     if($stmt = mysqli_prepare($connection, $sql3)){
         mysqli_stmt_bind_param($stmt, "s", $username);
         if(mysqli_stmt_execute($stmt)){
@@ -49,12 +51,15 @@ if(isset($_POST['update_password'])){
             mysqli_stmt_fetch($stmt);
             if(password_verify($_POST['current_password'], $hashed_password)) {
                 mysqli_stmt_free_result($stmt);
-                $sql4 = "UPDATE users set passwrd=? WHERE username=?";
+                $sql4 = "UPDATE admins set passwrd=? WHERE username=?";
                 if($stmt2 = mysqli_prepare($connection, $sql4)){
                     $hashed_password = password_hash($_POST['new_password'], PASSWORD_ARGON2ID);
                     mysqli_stmt_bind_param($stmt2, "ss",$hashed_password, $username);
                     if(!mysqli_stmt_execute($stmt2)){
                         echo "Oops! Something went wrong. Please try again later.";
+                    }
+                    else{
+                        $alert = '';
                     }
                 }
             }
@@ -66,14 +71,14 @@ if(isset($_POST['update_password'])){
 } 
 
 // select the data for the whole admins
-$sql2 = "SELECT * FROM users";
-$response = mysqli_query($connection, $sql2);
+// $sql2 = "SELECT * FROM admins";
+// $response = mysqli_query($connection, $sql2);
 
 // delete admin
 if (isset($_GET['delete'])) {
     $delete_id = $_GET['delete'];
     if($delete_id != 19){
-        $sql = "DELETE FROM users WHERE id = ?";
+        $sql = "DELETE FROM admins WHERE id = ?";
         if ($stmt = mysqli_prepare($connection, $sql)) {
             mysqli_stmt_bind_param($stmt, "s", $delete_id);
             mysqli_stmt_execute($stmt);
@@ -103,16 +108,22 @@ include '../include/navbar.php';
 ?>
 <body>
 <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-2 col-sm-0">
             <?php include '../include/sidebar.php'; ?>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-10 col-sm-12">
             <div class="container">
                 <h1>Hello <?php echo $first_name. " " . $last_name;?></h1>
 
-                <div class="alert alert-danger alert-dismissible fade show warning_msg" role="alert" id="warning">
-                    <p id="warning_message"></p>
+                <div class="alert alert-danger alert-dismissible fade show warning_msg" role="alert" id="warning" 
+                <?php if(isset($incorrect_password)) echo"style='display:block';";?>>
+                    <p id="warning_message"><?php if(isset($incorrect_password)) echo $incorrect_password; ?></p>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <div class="alert alert-success alert-dismissible fade show <?php echo $alert; ?>" role="alert">
+                personal information was updated successfully
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
 
                 <div class="row">
@@ -120,7 +131,7 @@ include '../include/navbar.php';
                         <div class="update_info">
                             <form method="post" onsubmit="return check_input()">
                                 <fieldset>
-                                    <legend>Personal Inforamtion</legend>
+                                    <legend>Personal Inforamtion</legend> 
                                     <input type="text" name="first_name" value="<?php echo isset($_POST['first_name']) ? $_POST['first_name'] : $first_name;?>" class="form-control" id="first_name">
                                     <input type="text" name="last_name" value="<?php echo isset($_POST['last_name']) ? $_POST['last_name'] : $last_name;?>"  class="form-control" id="last_name">
                                     <div class="button_position">
@@ -137,7 +148,6 @@ include '../include/navbar.php';
                                 <fieldset>
                                     <legend>Change Password</legend>
                                     <input type="text" name="current_password" placeholder="Current Password" class="form-control" id="current_password">
-                                    <spna class="warning" style="display: block;"><?php if(isset($incorrect_password)) echo $incorrect_password; ?></spna>
                                     <div class="row">
                                         <div class="col-sm-6">
                                             <input type="text" name="new_password" placeholder="New Password" class="form-control" id="new_password">
@@ -157,7 +167,7 @@ include '../include/navbar.php';
 
                 <div class="row separator">
                     <div class="col-sm-9">
-                        <h2>Admins Inforamtion</h2>
+                        <h2>Admins Information</h2>
                     </div>
                     <form method="post" class="col-sm-3">
                         <div class="search-box search">
@@ -168,10 +178,10 @@ include '../include/navbar.php';
                 </div>
                 <?php
                 // select admins by search
-                $sql5 = "SELECT * FROM users";
+                $sql5 = "SELECT * FROM admins";
                 if(isset($_POST['search'])){
                     $search_text = $_POST['search_text'];
-                    $sql5 = "SELECT * FROM users WHERE id = ? OR username=? OR first_name=? OR last_name=?";
+                    $sql5 = "SELECT * FROM admins WHERE id = ? OR username=? OR first_name=? OR last_name=?";
                 }
                 if($stmt = mysqli_prepare($connection, $sql5)){
                     if(isset($_POST['search'])){
@@ -216,10 +226,10 @@ include '../include/navbar.php';
                 </table>
             </div>
             <div class="add_admin">
-        <button type="submit" name="add_admin" class="btn btn-primary"><a href="add_user.php" class="add_link"> Add Admin</a></button>
+        <button type="submit" name="add_admin" class="btn btn-primary"><a href="add_admin.php" class="add_link"> Add Admin</a></button>
     </div>
         </div>
     
     <script src="../../external/bootstrap/bootstrap.min.js"></script>
-    <script src="../../js/profile.js"></script>
+    <script src="../../js/prof.js"></script>
 </body>

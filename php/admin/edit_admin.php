@@ -7,7 +7,7 @@ if(isset($_POST['edit'])){
     $first_name = $_POST['first_name'];
     $last_name  = $_POST['last_name'];
 
-    $sql = "UPDATE users SET first_name=?, last_name=? WHERE id=?;";
+    $sql = "UPDATE admins SET first_name=?, last_name=? WHERE id=?;";
     $stmt = mysqli_stmt_init($connection);
     if(mysqli_stmt_prepare($stmt,$sql)){
         mysqli_stmt_bind_param($stmt,"sss",$_POST['first_name'],$_POST['last_name'],$_GET['edit']);

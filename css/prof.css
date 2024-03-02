@@ -27,8 +27,20 @@
     align-items: end;
 }
 
+.warning{
+    padding: 0 5px 10px 0;
+    font-size: 16px;
+    color: crimson;
+    display: none;
+}
+
 .separator{
     margin: 50px 0 20px 0;
+}
+
+.warning_msg{
+    padding: 0 0 20px 0;
+    height: 50px;
 }
 
 .search{
@@ -80,13 +92,6 @@
 .delete{
     margin-left: 20px;
     color: #E34724;
-}
-
-.inline{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items:center;
 }
 
 

@@ -15,7 +15,7 @@
 
   if(isset($_GET['logout'])){
     session_destroy();
-    header('location:../admin/add_user.php');
+    header('location:../admin/login.php');
     exit();
   }
 ?>

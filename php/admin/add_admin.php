@@ -11,7 +11,7 @@ if(isset($_POST['add'])){
       
 
     $result = false;
-    $sql = "SELECT * FROM users WHERE username=?;";
+    $sql = "SELECT * FROM admins WHERE username=?;";
     $stmt = mysqli_stmt_init($connection);
     if(mysqli_stmt_prepare($stmt,$sql)){
         mysqli_stmt_bind_param($stmt,"s",$username);
@@ -19,20 +19,20 @@ if(isset($_POST['add'])){
         $result_data = mysqli_stmt_get_result($stmt);
         if(mysqli_fetch_assoc($result_data)){
             $result=true;
-            header("location:add_user.php?error=alreadyexist");
+            header("location:add_admin.php?error=alreadyexist");
         }
         else{
             $result=false; 
         }   
     }
     else{
-        header("location:add_user.php?error=stmtfailed");
+        header("location:add_admin.php?error=stmtfailed");
         exit();
     }
     mysqli_stmt_close($stmt);
 
     if(!$result){
-      $sql = "INSERT INTO users (first_name, last_name, username, passwrd) VALUES (?,?,?,?);";
+      $sql = "INSERT INTO admins (first_name, last_name, username, passwrd) VALUES (?,?,?,?);";
       $stmt = mysqli_stmt_init($connection);
       if(mysqli_stmt_prepare($stmt,$sql)){
         $hashed_password = password_hash($password, PASSWORD_ARGON2ID);
@@ -41,7 +41,7 @@ if(isset($_POST['add'])){
       }
           
       else{
-        header("location:add_user.php?error=stmtfailed");
+        header("location:add_admin.php?error=stmtfailed");
         exit();
       }
   
@@ -111,5 +111,5 @@ if(isset($_POST['add'])){
       </form>
     </div>
 
-    <script src="../../js/add_user.js"></script>
+    <script src="../../js/add_admin.js"></script>
 </body>

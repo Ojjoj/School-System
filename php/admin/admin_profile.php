@@ -1,5 +1,10 @@
 <?php
-include_once '../include/admin_checkout.php'; 
+include_once '../include/admin_checkout.php';
+
+if($_SESSION['username'] === 'johndeo@gmail.com'){
+  header("location:dashboard.php");
+  exit();
+} 
 
 $check_password = false;
 
@@ -13,7 +18,7 @@ if(isset($_POST['update'])){
 
     $check_password = false;
 
-    $sql = "SELECT id, username, passwrd FROM users WHERE username = ?";
+    $sql = "SELECT id, username, passwrd FROM admins WHERE username = ?";
     if($stmt = mysqli_prepare($connection, $sql)){
         mysqli_stmt_bind_param($stmt, "s", $username);
         if(mysqli_stmt_execute($stmt)){
@@ -43,7 +48,7 @@ if(isset($_POST['update'])){
 
 if($check_password){
     $hashed_password = password_hash($new_password, PASSWORD_ARGON2ID);
-    $sql = "UPDATE users set passwrd=? WHERE username=?";
+    $sql = "UPDATE admins set passwrd=? WHERE username=?";
 
     if($stmt = mysqli_prepare($connection, $sql)){
         mysqli_stmt_bind_param($stmt, "ss", $hashed_password,$username);

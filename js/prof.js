@@ -1,4 +1,3 @@
-alert("hi");
 function check_input(){
     let first_name      = document.getElementById('first_name').value;
     let last_name       = document.getElementById('last_name').value;
@@ -54,7 +53,6 @@ function check_input_value(input_value, warning){
         warning.style.display ='block';
         return false;
     }
-    alert(input_value.length)
     warning.style.display ='none';
     return true;
 }

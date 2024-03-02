@@ -4,7 +4,7 @@ if(isset($_POST['submit'])){
 
     $username = strtolower($_POST['username']);
     $password = $_POST['password'];
-    $sql = "SELECT id, username, passwrd FROM users WHERE username = ?";
+    $sql = "SELECT id, username, passwrd FROM admins WHERE username = ?";
     if($stmt = mysqli_prepare($connection, $sql)){
         mysqli_stmt_bind_param($stmt, "s", $username);
         if(mysqli_stmt_execute($stmt)){
