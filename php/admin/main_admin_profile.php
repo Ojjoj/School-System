@@ -77,7 +77,7 @@ if(isset($_POST['update_password'])){
 // delete admin
 if (isset($_GET['delete'])) {
     $delete_id = $_GET['delete'];
-    if($delete_id != 19){
+    if($delete_id != 23){
         $sql = "DELETE FROM admins WHERE id = ?";
         if ($stmt = mysqli_prepare($connection, $sql)) {
             mysqli_stmt_bind_param($stmt, "s", $delete_id);
