@@ -80,9 +80,9 @@
           </a>
         </li>
         <li>
-          <a href="#" class="nav-link text-white">
-            <i class="bi pe-none me-2 fa-solid fa-list-check"></i>
-            Attendance
+          <a href="../admin/transportation.php" class="nav-link text-white">
+            <i class="bi pe-none me-2 fa-solid fa-bus"></i>
+            Transportation
           </a>
         </li>
         <li>

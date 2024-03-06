@@ -1,5 +1,5 @@
 <?php
-include_once '../include/admin_checkout.php'; 
+# include_once '../include/admin_checkout.php'; 
 
 include_once '../include/connect.php';
 
@@ -84,7 +84,7 @@ mysqli_close($connection);
     <link href="../../external/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="../../external/fontawesome/css/all.min.css" rel="stylesheet">
     <link href="../../external/fontawesome/css/fontawesome.min.css" rel="stylesheet">
-    <link href="../../css/student.css" rel="stylesheet">
+    <link href="../../css/edit_student.css" rel="stylesheet">
 </head>
 
 

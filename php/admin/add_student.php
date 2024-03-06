@@ -62,7 +62,6 @@ if (isset($_POST['submit'])) {
     <link href="../../external/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="../../external/fontawesome/css/all.min.css" rel="stylesheet">
     <link href="../../external/fontawesome/css/fontawesome.min.css" rel="stylesheet">
-    <link href="../../css/student.css" rel="stylesheet">
 </head>
 
 
