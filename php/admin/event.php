@@ -1,4 +1,5 @@
 <?php
+include_once '../include/admin_checkout.php'; 
 include_once '../include/connect.php';
 
 // fetch all data
@@ -85,61 +86,51 @@ mysqli_close($connection);
             }
         </style>
     </head>
-    <?php
-        include '../include/navbar.php';
-    ?>
     <body class="bg-light">
-    <div class="row">
-        <div class="col-md-2 col-sm-0">
-            <?php include '../include/sidebar.php'; ?>
-        </div>
-        <div class="col-md-10 col-sm-12">
-            <div class="container py-5" id="page_container">
-                <div class="row">
-                    <div class="col-md-9">
-                        <div id="calendar"></div>
-                    </div>
-                    
-                    <div class="col-md-3">
-                        <div class="shadow">
-                            <div class="bg-primary text-light bg-gradient padding">
-                                <h4 class="text-center">Event form</h4>
-                            </div>
-                            <div class="padding">
-                                <div class="container-fluid">
-                                    <form method="post" action="" id="event_form">
-                                        <input type="hidden" name="id" value="">
-                                        <div class="mb-2">
-                                            <label for="title" class="control-label">Title</label>
-                                            <input type="text" class="form-control form-control-sm rounded-0" name="title" id="title" required>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label for="description" class="control-label">Description</label>
-                                            <textarea rows="3" class="form-control form-control-sm rounded-0" name="description" id="description" required></textarea>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label for="start_datetime" class="control-label">Start</label>
-                                            <input type="datetime-local" class="form-control form-control-sm rounded-0" name="start_datetime" id="start_datetime" required>
-                                        </div>
-                                        <div class="mb-2">
-                                            <label for="end_datetime" class="control-label">End</label>
-                                            <input type="datetime-local" class="form-control form-control-sm rounded-0" name="end_datetime" id="end_datetime" required>
-                                        </div>
-                                    </form>
-                                </div>  
-                            </div>
-                            <div class="padding">
-                                <div class="text-center">
-                                    <button class="btn btn-primary btn-sm rounded-0" name="save" type="submit" form="event_form"><i class="fa fa-save"></i> Save</button>
-                                    <button class="btn btn-default border btn-sm rounded-0" type="reset" form="event_form"><i class="fa fa-reset"></i> Cancel</button>
-                                </div>
+        <div class="container py-5" id="page_container">
+            <div class="row">
+                <div class="col-md-9">
+                    <div id="calendar"></div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="shadow">
+                        <div class="bg-primary text-light bg-gradient padding">
+                            <h4 class="text-center">Event form</h4>
+                        </div>
+                        <div class="padding">
+                            <div class="container-fluid">
+                                <form method="post" action="" id="event_form">
+                                    <input type="hidden" name="id" value="">
+                                    <div class="mb-2">
+                                        <label for="title" class="control-label">Title</label>
+                                        <input type="text" class="form-control form-control-sm rounded-0" name="title" id="title" required>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="description" class="control-label">Description</label>
+                                        <textarea rows="3" class="form-control form-control-sm rounded-0" name="description" id="description" required></textarea>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="start_datetime" class="control-label">Start</label>
+                                        <input type="datetime-local" class="form-control form-control-sm rounded-0" name="start_datetime" id="start_datetime" required>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label for="end_datetime" class="control-label">End</label>
+                                        <input type="datetime-local" class="form-control form-control-sm rounded-0" name="end_datetime" id="end_datetime" required>
+                                    </div>
+                                </form>
+                            </div>  
+                        </div>
+                        <div class="padding">
+                            <div class="text-center">
+                                <button class="btn btn-primary btn-sm rounded-0" name="save" type="submit" form="event_form"><i class="fa fa-save"></i> Save</button>
+                                <button class="btn btn-default border btn-sm rounded-0" type="reset" form="event_form"><i class="fa fa-reset"></i> Cancel</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
 
         <!-- Popup Model for events -->
         <div class="modal fade" tabindex="-1" data-bs-backdrop="static" id="event_modal">
