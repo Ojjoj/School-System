@@ -5,7 +5,7 @@ if(isset($_POST['add'])){
     include_once '../include/connect.php';
 
     $first_name = $_POST['first_name'];
-    $last_name  = $_POST['last_name'];
+    $last_name  = $_POST['last_name'];  
     $username   = strtolower($_POST['username']);
     $password   = $_POST['password'];
       

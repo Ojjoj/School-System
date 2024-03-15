@@ -27,6 +27,7 @@ else {
 $alert = 'd-none';
 // update personal information
 if(isset($_POST['update'])){
+
     $sql = "UPDATE admins set first_name=?, last_name=? WHERE username=?";
     if($stmt = mysqli_prepare($connection, $sql)){
         mysqli_stmt_bind_param($stmt, "sss", $_POST['first_name'], $_POST['last_name'],$username);
@@ -181,11 +182,12 @@ include '../include/navbar.php';
                 $sql5 = "SELECT * FROM admins";
                 if(isset($_POST['search'])){
                     $search_text = $_POST['search_text'];
-                    $sql5 = "SELECT * FROM admins WHERE id = ? OR username=? OR first_name=? OR last_name=?";
+                    $sql5 = "SELECT * FROM admins WHERE id LIKE ? OR username LIKE ? OR first_name LIKE ? OR last_name LIKE ?";
                 }
                 if($stmt = mysqli_prepare($connection, $sql5)){
                     if(isset($_POST['search'])){
-                        mysqli_stmt_bind_param($stmt, "ssss", $search_text, $search_text, $search_text, $search_text);
+                        $search_pattern = "%$search_text%";
+                        mysqli_stmt_bind_param($stmt, "ssss", $search_pattern, $search_pattern, $search_pattern, $search_pattern);
                     }
                     if(mysqli_stmt_execute($stmt)){
                         $result = mysqli_stmt_get_result($stmt);
