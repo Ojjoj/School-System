@@ -31,11 +31,11 @@ if(isset($_POST['save'])){
         if(mysqli_stmt_prepare($stmt,$sql)){
             mysqli_stmt_bind_param($stmt,"ssss",$title, $description, $start_datetime, $end_datetime);
             mysqli_stmt_execute($stmt);
-            header("location:event.php");
-            exit();
+            // header("location:dashboard.php");
+            // exit();
         }
         else{
-            header("location:event.php?error=stmtfailed");
+            header("location:dashboard.php?error=stmtfailed");
             exit();
         }
     }
@@ -44,8 +44,8 @@ if(isset($_POST['save'])){
         if($stmt = mysqli_prepare($connection, $sql)){
             mysqli_stmt_bind_param($stmt, "ssssi", $title, $description, $start_datetime, $end_datetime, $id);
             if(mysqli_stmt_execute($stmt)){
-                header("location:event.php");
-                exit();
+                // header("location:dashboard.php");
+                // exit();
             }
             else{
                 echo "Oops! Something went wrong. Please try again later.";
@@ -80,9 +80,9 @@ mysqli_close($connection);
                 padding: 10px;
             }
             table, tbody, td, tfoot, th, thead, tr {
-            border-color: #ededed !important;
-            border-style: solid;
-            border-width: 1px !important;
+                border-color: #ededed !important;
+                border-style: solid;
+                border-width: 1px !important;
             }
         </style>
     </head>
@@ -100,7 +100,7 @@ mysqli_close($connection);
                         </div>
                         <div class="padding">
                             <div class="container-fluid">
-                                <form method="post" action="" id="event_form">
+                                <form method="post" action="dashboard.php" id="event_form">
                                     <input type="hidden" name="id" value="">
                                     <div class="mb-2">
                                         <label for="title" class="control-label">Title</label>
