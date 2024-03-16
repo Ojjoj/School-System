@@ -32,8 +32,17 @@ if (isset($_GET['delete'])) {
 
     $delete_id = $_GET['delete'];
 
-    $sql = "DELETE FROM bus WHERE bus_id = $delete_id";
-    mysqli_query($connection, $sql);
+    $sql_delete_bus = "DELETE FROM bus WHERE bus_id = ?";
+    $stmt_delete_bus = mysqli_prepare($connection, $sql_delete_bus);
+    mysqli_stmt_bind_param($stmt_delete_bus, "i", $delete_id);
+    mysqli_stmt_execute($stmt_delete_bus);
+    mysqli_stmt_close($stmt_delete_bus);
+
+    $sql_update_students = "UPDATE student SET transportation = 'own_transportation', bus_id = NULL WHERE bus_id = ?";
+    $stmt_update_students = mysqli_prepare($connection, $sql_update_students);
+    mysqli_stmt_bind_param($stmt_update_students, "i", $delete_id);
+    mysqli_stmt_execute($stmt_update_students);
+    mysqli_stmt_close($stmt_update_students);
 
     header('location:transportation.php');
     exit;

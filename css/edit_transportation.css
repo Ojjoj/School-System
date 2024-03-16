@@ -45,17 +45,14 @@ table.table td a {
 }
 
 
-table.table td a.edit {
-    color: #FFC107;
+.delete-td {
+    text-align: center;
 }
 
 table.table td a.delete {
     color: #E34724;
 }
 
-table.table td a.view {
-    color: #03A9F4;
-}
 
 table.table td i {
     font-size: 19px;

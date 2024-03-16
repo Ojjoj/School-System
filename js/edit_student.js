@@ -42,3 +42,12 @@ function populateCountrySelect(selected_country) {
         countrySelect.appendChild(option);
     });
 }
+
+function validateForm() {
+    var selectElement = document.getElementById("bus");
+    if (selectElement.value === "") {
+        alert("Please select a bus.");
+        return false; 
+    }
+    return true; 
+}

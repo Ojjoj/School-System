@@ -1,15 +1,29 @@
 <?php
-# include_once '../include/admin_checkout.php'; 
-
+include_once '../include/admin_checkout.php';
 include_once '../include/connect.php';
 
-$studentsPerPage = 5;
+function calculate_age($dateOfBirth) {
+    $dob = new DateTime($dateOfBirth);
+    $now = new DateTime();
+    $age = $now->diff($dob);
+    return $age->y;
+}
+
+$studentsPerPage = 10;
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 $offset = ($page - 1) * $studentsPerPage;
 
 
-$sql = "SELECT student_id, first_name, last_name, date_of_birth, gender, country FROM student LIMIT $offset, $studentsPerPage";
+$sql = "SELECT student_id, first_name, last_name, date_of_birth, gender, country FROM student";
 $sql_total_students = "SELECT COUNT(*) AS total FROM student";
+
+if (isset($_GET['search'])) {
+    $search_query = mysqli_real_escape_string($connection, $_GET['search']);
+    $sql .= " WHERE first_name LIKE '%$search_query%' OR last_name LIKE '%$search_query%' OR country LIKE '%$search_query%'";
+    $sql_total_students .= " WHERE first_name LIKE '%$search_query%' OR last_name LIKE '%$search_query%' OR country LIKE '%$search_query%'";
+}
+
+$sql .= " LIMIT $offset, $studentsPerPage";
 
 if ($stmt = mysqli_prepare($connection, $sql)) {
     mysqli_stmt_execute($stmt);
@@ -91,10 +105,10 @@ include '../include/navbar.php';
                             </div>
                             <div class="col-sm-4">
                                 <div class="search-box">
-                                    <a href="transportation.php">
-                                        <i class="fa-solid fa-magnifying-glass"></i>
-                                    </a>
-                                    <input type="text" class="form-control" placeholder="Search&hellip;">
+                                    <form id="searchForm" action="student.php" method="GET">
+                                        <i class="fa-solid fa-magnifying-glass" onclick="submit_form()"></i>
+                                        <input type="text" class="form-control" name="search" id="searchInput" placeholder="Search&hellip;" value=<?php echo $_GET["search"] ?? ""; ?>>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -112,78 +126,83 @@ include '../include/navbar.php';
                             </tr>
                         </thead>
                         <tbody>
+                            <?php while ($row = mysqli_fetch_assoc($result)) : ?>
+                                <tr>
+                                    <td><?php echo $row['student_id']; ?></td>
+                                    <td><?php echo $row['first_name']; ?></td>
+                                    <td><?php echo $row['last_name']; ?></td>
+                                    <td><?php echo calculate_age($row['date_of_birth']); ?></td>
+                                    <td><?php echo $row['gender']; ?></td>
+                                    <td><?php echo $row['country']; ?></td>
+                                    <td>
+                                        <a href="view_student.php?view=<?php echo $row['student_id']; ?>" class="view" title="View" name="view" data-toggle="tooltip">
+                                            <i class="fa-solid fa-eye"></i>
+                                        </a>
+                                        <a href="edit_student.php?edit=<?php echo $row['student_id']; ?>" class="edit" title="Edit" name="edit" data-toggle="tooltip">
+                                            <i class="fa-solid fa-pencil"></i>
+                                        </a>
+                                        <a href="student.php?delete=<?php echo $row['student_id']; ?>" class="delete" title="Delete" name="delete" data-toggle="tooltip" onclick="return confirm('Delete this student?');">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+
+                        </tbody>
+                    </table>
+                    <?php
+
+                    $totalPages = ceil($total_students / $studentsPerPage);
+                    $current_entries_start = min($total_students, $offset + 1);
+                    $current_entries_end = min($total_students, $offset + $studentsPerPage);
+
+                    if ($current_entries_end < $offset + $studentsPerPage) {
+                        $studentsPerPage = $current_entries_end - $offset;
+                    } ?>
+
+                    <div class='clearfix'>
+                        <div class='hint-text'>Showing <b><?php echo $studentsPerPage ?></b> out of <b><?php echo $total_students ?></b> entries</div>
+
                         <?php
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            $student_id = $row['student_id'];
-                            $first_name = $row['first_name'];
-                            $last_name = $row['last_name'];
-                            $date_of_birth = $row['date_of_birth'];
-                            $gender = $row['gender'];
-                            $country = $row['country'];
-                            echo "<tr>";
-                            echo "<td>$student_id</td>";
-                            echo "<td>$first_name</td>";
-                            echo "<td>$last_name</td>";
-                            echo "<td>$date_of_birth</td>";
-                            echo "<td>$gender</td>";
-                            echo "<td>$country</td>";
-                            echo "<td>";
-                            echo '   <a href="view_student.php?view=' . $student_id . '" class="view" title="View" name="view" data-toggle="tooltip"><i class="fa-solid fa-eye"></i></a>';
-                            echo '   <a href="edit_student.php?edit=' . $student_id . '" class="edit" title="Edit" name="edit" data-toggle="tooltip"><i class="fa-solid fa-pencil"></i></a>';
-                            echo '   <a href="student.php?delete=' . $student_id . '" class="delete" title="Delete" name="delete" data-toggle="tooltip" onclick="return confirm(\'Delete this student?\');"><i class="fa-solid fa-trash"></i></a>';
-                            echo "</td>";
-                            echo "</tr>";
-                        }
-                        echo '  </tbody>';
-                        echo '</table>';
-
-                        $totalPages = ceil($total_students / $studentsPerPage);
-                        $current_entries_start = min($total_students, $offset + 1);
-                        $current_entries_end = min($total_students, $offset + $studentsPerPage);
-
-                        if ($current_entries_end < $offset + $studentsPerPage) {
-                            $studentsPerPage = $current_entries_end - $offset;
-                        }
-
-                        echo "<div class='clearfix'>";
-                        echo "<div class='hint-text'>Showing <b>$studentsPerPage</b> out of <b>$total_students</b> entries</div>";
-                        echo "<ul class='pagination'>";
-                        echo "<li class='page-item ";
-                        if ($page == 1) {
-                            echo "disabled";
-                        }
-                        echo "'><a href='";
-                        if ($page > 1) {
-                            echo "?page=" . ($page - 1);
-                        }
-                        echo "'><i class='fa fa-angle-double-left'></i></a></li>";
-                        for ($i = 1; $i <= $totalPages; $i++) {
-                            if ($i == $page) {
-                                echo "<li class='page-item active'><a href='#' class='page-link'>$i</a></li>";
-                            } else {
-                                echo "<li class='page-item'><a href='?page=$i' class='page-link'>$i</a></li>";
-                            }
-                        }
-                        echo "<li class='page-item ";
-                        if ($page == $totalPages || $totalPages == 0) {
-                            echo "disabled";
-                        }
-                        echo "'><a href='";
-                        if ($page < $totalPages) {
-                            echo "?page=" . ($page + 1);
-                        }
-                        echo "'><i class='fa fa-angle-double-right'></i></a></li>";
-                        echo "</ul>";
-                        echo "</div>";
-                    } else {
-                        echo "Error: " . mysqli_error($connection);
-                    }
+                        // Calculate start and end pages for pagination sliding window
+                        $maxVisiblePages = 5;
+                        $startPage = max(1, $page - floor($maxVisiblePages / 2));
+                        $endPage = min($totalPages, $startPage + $maxVisiblePages - 1);
+                        $startPage = max(1, $endPage - $maxVisiblePages + 1);
                         ?>
-                        <div class="text-center">
-                            <a href="add_student.php" class="btn btn-primary rounded-pill px-3">Add Student</a>
-                        </div>
+
+                        <!-- Output the pagination links -->
+                        <ul class="pagination">
+                            <!-- Previous page link -->
+                            <li class="page-item <?php echo $page == 1 ? 'disabled' : ''; ?>">
+                                <a class="page-link" href="<?php echo $page > 1 ? "?page=" . ($page - 1) : "#"; ?>" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+
+                            <!-- Page links within the sliding window -->
+                            <?php for ($i = $startPage; $i <= $endPage; $i++) : ?>
+                                <li class="page-item <?php echo $i == $page ? 'active' : ''; ?>">
+                                    <a class="page-link" href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+                                </li>
+                            <?php endfor; ?>
+
+                            <!-- Next page link -->
+                            <li class="page-item <?php echo $page == $totalPages || $totalPages == 0 ? 'disabled' : ''; ?>">
+                                <a class="page-link" href="<?php echo $page < $totalPages ? "?page=" . ($page + 1) : "#"; ?>" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                <?php } ?>
+                <div class="text-center">
+                    <a href="add_student.php" class="btn btn-primary rounded-pill px-3">Add Student</a>
+                </div>
                 </div>
             </div>
 </body>
+
+<script src="../../js/student.js"></script>
 
 </html>

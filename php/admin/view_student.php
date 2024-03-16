@@ -134,9 +134,9 @@ include '../include/navbar.php';
                                 <td>
                                     <?php echo $transportation ? $transportation : "Not available";
                                     if ($transportation == "school_bus") {
-                                        echo '<p><strong>Bus:</strong> <?php echo $bus_id ? $bus_id : "Not available"; ?></p>';
-                                    }
                                     ?>
+                                        <p><strong>Bus: </strong><?php echo $bus_id ? $bus_id : "Not available" ?></p>
+                                    <?php } ?>
                                 </td>
                             </tr>
                         </table>

@@ -1,6 +1,5 @@
 <?php
-# include_once '../include/admin_checkout.php'; 
-
+include_once '../include/admin_checkout.php';
 include_once '../include/connect.php';
 
 $alert = 'd-none';
@@ -71,6 +70,9 @@ if (isset($_GET['edit'])) {
     exit;
 }
 
+$bus_query = "SELECT bus_id, bus_name FROM bus";
+$bus_result = mysqli_query($connection, $bus_query);
+
 mysqli_close($connection);
 ?>
 
@@ -98,7 +100,7 @@ include '../include/navbar.php';
             <?php include '../include/sidebar.php'; ?>
         </div>
         <div class="col-md-10">
-            <form action="" method="POST">
+            <form action="" method="POST" onsubmit="return validateForm()">
                 <div class="container mt-3">
                     <div class="row me-3">
                         <div class="alert alert-success alert-dismissible fade show <?php echo $alert; ?>" role="alert">
@@ -207,7 +209,14 @@ include '../include/navbar.php';
                                 <div class="col-md-6">
                                     <label class="form-label">Choose Bus</label>
                                     <select class="form-select" id="bus" name="bus" <?php if ($transportation == "own_transportation") echo "disabled" ?>>
-                                        <option value="1">Select Bus</option>
+                                        <option value="" selected>Select a bus</option> 
+                                        <?php
+                                        while ($bus_row = mysqli_fetch_assoc($bus_result)) {
+                                            $selected = ($bus_row['bus_id'] == $bus_id) ? 'selected' : '';
+                                            echo "<option value='" . $bus_row['bus_id'] . "' $selected>" . $bus_row['bus_name'] . "</option>";
+                                        }
+                                        mysqli_free_result($bus_result);
+                                        ?>
                                     </select>
                                 </div>
                             </div>
