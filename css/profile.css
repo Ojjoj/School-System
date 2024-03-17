@@ -27,20 +27,9 @@
     align-items: end;
 }
 
-.warning{
-    padding: 0 5px 10px 0;
-    font-size: 16px;
-    color: crimson;
-    display: none;
-}
 
 .separator{
     margin: 50px 0 20px 0;
-}
-
-.warning_msg{
-    padding: 0 0 20px 0;
-    height: 50px;
 }
 
 .search{
@@ -53,12 +42,12 @@
     left:10px;
     background: none;
     border: none;
-    color: #444;
+    color: #555;
 
 }
-.search_input{
+#search_input{
     padding-left: 40px;
-    border-radius: 20px;
+    border-radius: 20px;    
 }
 
 .search_button:hover{
@@ -92,6 +81,28 @@
 .delete{
     margin-left: 20px;
     color: #E34724;
+}
+
+#warning{
+    height: 55px;
+}
+
+.password_field{
+    position: relative;
+}
+
+.password_icon1{
+    position: absolute;
+    right: 3.5%;
+    bottom:22%;
+    color:#555;
+}
+
+.password_icon2{
+    position: absolute;
+    right: 10%;
+    bottom:15%;
+    color:#555;
 }
 
 

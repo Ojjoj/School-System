@@ -16,23 +16,25 @@ if (isset($_POST['submit'])) {
             session_start();
             $_SESSION["username"] = $username;
             header("location:dashboard.php");
-          } else {
+          } 
+          else {
             $login_error = "Invalid username or password";
           }
         }
-      } else {
+      } 
+      else {
         $login_error = "Invalid username or password.";
       }
-    } else {
+    } 
+    else {
       echo "Oops! Something went wrong. Please try again later.";
     }
-  } else {
+  } 
+  else {
     $login_error = "Invalid username or password.";
   }
   mysqli_stmt_close($stmt);
-} else {
-  echo "Oops! Something went wrong. Please try again later.";
-}
+} 
 ?>
 <!DOCTYPE html>
 
@@ -42,7 +44,9 @@ if (isset($_POST['submit'])) {
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <link rel="stylesheet" href="../../external/bootstrap/bootstrap.min.css">
-  <link rel="stylesheet" href="../../css/logina.css">
+  <link rel="stylesheet" href="../../external/fontawesome/css/all.min.css">
+  <link rel="stylesheet" href="../../external/fontawesome/css/fontawesome.min.css">
+  <link rel="stylesheet" href="../../css/login.css">
 </head>
 
 <body>
@@ -62,7 +66,10 @@ if (isset($_POST['submit'])) {
 
       <div class="mb-3">
         <label for="password" class="form-label">Password</label>
-        <input type="password" class="form-control" name="password" id="password" value="<?php echo isset($_POST['password']) ? $_POST['password'] : ''; ?>">
+        <div class="password_field">
+          <input type="password" class="form-control" name="password" id="password" value="<?php echo isset($_POST['password']) ? $_POST['password'] : ''; ?>">
+          <i class="fa-regular fa-eye" id="password_icon" onclick="toggle_password('password','password_icon')"></i>
+        </div>
         <span id="password_error"></span>
         <div class="center"><span><?php if (isset($login_error)) echo $login_error; ?></span></div>
       </div>

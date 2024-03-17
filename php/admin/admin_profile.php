@@ -69,10 +69,10 @@ if($check_password){
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="stylesheet" href="../../external/bootstrap/bootstrap.min.css" >
-    <link rel="sylesheet"  href="../../external/fontawesome/css/all.min.css">
-    <link rel="sylesheet"  href="../../external/fontawesome/css/fontawesome.min.css">
-    <link rel="stylesheet" href="../../css/logina.css">
+    <link rel="stylesheet" href="../../external/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../external/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../../external/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="../../css/login.css">
 </head>
 <body>
     <div class="container">
@@ -85,19 +85,28 @@ if($check_password){
 
         <div class="mb-3">
           <label for="oldpassword" class="form-label">Current Password</label>
-          <input type="password" class="form-control" name="old_password" id="old_password">
+          <div class="password_field">
+            <input type="password" class="form-control" name="old_password" id="old_password">
+            <i class="fa-regular fa-eye password_icon" id="password_icon1" onclick="toggle_password('old_password','password_icon1')"></i>
+          </div>
           <span id="old_password_error"></span>
         </div>
 
         <div class="mb-3">
           <label for="new_password" class="form-label">New Password</label>
-          <input type="password" class="form-control" name="new_password" id="new_password">
+          <div class="password_field">
+            <input type="password" class="form-control" name="new_password" id="new_password">
+            <i class="fa-regular fa-eye password_icon" id="password_icon2" onclick="toggle_password('new_password','password_icon2')"></i>
+          </div>
           <span id="new_password_error"></span>
         </div>
 
         <div class="mb-3">
           <label for="confirm_password" class="form-label">Confirm Password</label>
-          <input type="password" class="form-control" name="confirm_password" id="confirm_password">
+          <div class="password_field">
+            <input type="password" class="form-control" name="confirm_password" id="confirm_password">
+            <i class="fa-regular fa-eye password_icon" id="password_icon3" onclick="toggle_password('confirm_password','password_icon3')"></i>
+          </div>
           <span id="confirm_password_error"></span>
           <span id="matching_password_error"></span>
           <span><?php if(isset($password_error)) {echo $password_error;} ?></span>
