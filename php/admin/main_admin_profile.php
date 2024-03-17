@@ -100,9 +100,17 @@ if (isset($_GET['delete'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="stylesheet" href="../../external/bootstrap/bootstrap.min.css">
+<<<<<<< HEAD
     <link rel="stylesheet" href="../../external/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="../../external/fontawesome/css/fontawesome.min.css">
     <link rel="stylesheet" href="../../css/profile.css">
+=======
+    <link rel="sylesheet"  href="../../external/fontawesome/css/all.min.css">
+    <link rel="sylesheet"  href="../../external/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="../../css/prof.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+>>>>>>> 2f258ce188d753de897933e611a87b057dec9b40
 </head>
 <?php
     include '../include/navbar.php';

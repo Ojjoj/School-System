@@ -38,7 +38,10 @@
     font-size: 19px;
     top: 8px;
     left: 10px;
+    cursor: pointer;
+
 }
+
 
 table.table tr th,
 table.table tr td {
