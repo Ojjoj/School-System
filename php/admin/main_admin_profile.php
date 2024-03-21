@@ -177,7 +177,7 @@ if (isset($_GET['delete'])) {
                     <form method="post" class="col-sm-3">
                         <div class="search-box search">
                             <button type="submit" class="search_button" name="search"><i class="fa-solid fa-magnifying-glass"></i></button>
-                            <input type="text" class="form-control" id="search_input" placeholder="Search&hellip;" name="search_text">
+                            <input type="text" class="form-control" placeholder="Search&hellip;" name="search_text">
                         </div>
                     </form>
                 </div>

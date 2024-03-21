@@ -47,7 +47,7 @@
   </head>
 
   <body>
-    <main class="sidebar text-bg-dark">
+    <main class="sidebar text-bg-dark d-md-block d-none" >
 
       <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark ">
         <!--
@@ -74,6 +74,12 @@
             <a href="../admin/student.php" class="nav-link text-white">
               <i class="bi pe-none me-2 fa-solid fa-user-graduate"></i>
               Students
+            </a>
+          </li>
+          <li>
+            <a href="../admin/course.php" class="nav-link text-white">
+              <i class="bi pe-none me-2 fa-solid fa-clipboard"></i>
+              Courses
             </a>
           </li>
           <li>
