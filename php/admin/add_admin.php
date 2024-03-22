@@ -59,10 +59,10 @@ if(isset($_POST['add'])){
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="stylesheet" href="../../external/bootstrap/bootstrap.min.css" >
-    <link rel="sylesheet"  href="../../external/fontawesome/css/all.min.css">
-    <link rel="sylesheet"  href="../../external/fontawesome/css/fontawesome.min.css">
-    <link rel="stylesheet" href="../../css/logina.css">
+    <link rel="stylesheet" href="../../external/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="../../external/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../../external/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="../../css/login.css">
 </head>
 <body>
     <div class="container">
@@ -101,7 +101,10 @@ if(isset($_POST['add'])){
 
         <div class="mb-3">
           <label for="password" class="form-label">Password</label>
-          <input type="password" class="form-control" name="password" id="password">
+          <div class="password_field">
+            <input type="password" class="form-control" name="password" id="password">
+            <i class="fa-regular fa-eye" id="password_icon" onclick="toggle_password('password','password_icon')"></i>
+          </div>
           <span id="password_error"></span>
         </div>
 

@@ -74,7 +74,6 @@ mysqli_close($connection);
             body {
                 height: 100%;
                 width: 100%;
-                font-family: Apple Chancery, cursive;
             }
             .padding{
                 padding: 10px;

@@ -139,7 +139,7 @@ include '../include/navbar.php';
                                         <a href="view_student.php?view=<?php echo $row['student_id']; ?>" class="view" title="View" name="view" data-toggle="tooltip">
                                             <i class="fa-solid fa-eye"></i>
                                         </a>
-                                        <a href="edit_student.php?edit=<?php echo $row['student_id']; ?>" class="edit" title="Edit" name="edit" data-toggle="tooltip">
+                                        <a href="edit_student.php?edit=<?php echo $row['student_id'];?>" class="edit" title="Edit" name="edit" data-toggle="tooltip">
                                             <i class="fa-solid fa-pencil"></i>
                                         </a>
                                         <a href="student.php?delete=<?php echo $row['student_id']; ?>" class="delete" title="Delete" name="delete" data-toggle="tooltip" onclick="return confirm('Delete this student?');">

@@ -116,7 +116,7 @@
           </a>
         </li>
         <li>
-          <a href="../admin/courses.php" class="nav-link text-white">
+          <a href="../admin/course.php" class="nav-link text-white">
             <i class="bi pe-none me-2 fa-solid fa-file-circle-check"></i>
             Courses
           </a>

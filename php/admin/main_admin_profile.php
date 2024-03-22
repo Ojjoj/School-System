@@ -23,11 +23,11 @@ if ($stmt = mysqli_prepare($connection, $sql)) {
 else {
     echo "Error in preparing SQL statement: " . mysqli_error($connection);
 }
+mysqli_stmt_close($stmt);
 
 $alert = 'd-none';
 // update personal information
 if(isset($_POST['update'])){
-
     $sql = "UPDATE admins set first_name=?, last_name=? WHERE username=?";
     if($stmt = mysqli_prepare($connection, $sql)){
         mysqli_stmt_bind_param($stmt, "sss", $_POST['first_name'], $_POST['last_name'],$username);
@@ -40,10 +40,12 @@ if(isset($_POST['update'])){
             echo "Oops! Something went wrong. Please try again later.";
         }
     }
+    mysqli_stmt_close($stmt);
 }   
 
 // update the password
 if(isset($_POST['update_password'])){
+    $incorrect_password = "";
     $sql3 = "SELECT id, username, passwrd FROM admins WHERE username = ?";
     if($stmt = mysqli_prepare($connection, $sql3)){
         mysqli_stmt_bind_param($stmt, "s", $username);
@@ -69,11 +71,8 @@ if(isset($_POST['update_password'])){
             }
         }
     }
+    mysqli_stmt_close($stmt);
 } 
-
-// select the data for the whole admins
-// $sql2 = "SELECT * FROM admins";
-// $response = mysqli_query($connection, $sql2);
 
 // delete admin
 if (isset($_GET['delete'])) {
@@ -85,6 +84,9 @@ if (isset($_GET['delete'])) {
             mysqli_stmt_execute($stmt);
         }
         header('location:main_admin_profile.php');
+    }
+    else{
+        echo '<script>alert("unable to delete the main admin")</script>';
     }
     
 }
@@ -98,33 +100,30 @@ if (isset($_GET['delete'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <link rel="stylesheet" href="../../external/bootstrap/bootstrap.min.css">
-    <link rel="sylesheet"  href="../../external/fontawesome/css/all.min.css">
-    <link rel="sylesheet"  href="../../external/fontawesome/css/fontawesome.min.css">
-    <link rel="stylesheet" href="../../css/prof.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
+    <link rel="stylesheet" href="../../external/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../../external/fontawesome/css/fontawesome.min.css">
+    <link rel="stylesheet" href="../../css/profile.css">
 </head>
 <?php
-include '../include/navbar.php';
+    include '../include/navbar.php';
 ?>
 <body>
 <div class="row">
-        <div class="col-md-2 col-sm-0">
-            <?php include '../include/sidebar.php'; ?>
+        <div class="col-md-2">
+            <?php  include '../include/sidebar.php';?>
         </div>
-        <div class="col-md-10 col-sm-12">
+        <div class="col-md-10">
             <div class="container">
                 <h1>Hello <?php echo $first_name. " " . $last_name;?></h1>
 
-                <div class="alert alert-danger alert-dismissible fade show warning_msg" role="alert" id="warning" 
-                <?php if(isset($incorrect_password)) echo"style='display:block';";?>>
-                    <p id="warning_message"><?php if(isset($incorrect_password)) echo $incorrect_password; ?></p>
+                <div class="alert alert-danger alert-dismissible fade show <?php echo (isset($incorrect_password) && $incorrect_password !== null) ? '' : 'd-none'; ?>" role="alert" id="warning">
+                    <p id="warning_message"><?php if(isset($incorrect_password) && $incorrect_password!==null) echo $incorrect_password; ?></p>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
 
                 <div class="alert alert-success alert-dismissible fade show <?php echo $alert; ?>" role="alert">
-                personal information was updated successfully
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    personal information was updated successfully
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
 
                 <div class="row">
@@ -148,13 +147,18 @@ include '../include/navbar.php';
                             <form method="post" onsubmit="return check_password()">
                                 <fieldset>
                                     <legend>Change Password</legend>
-                                    <input type="text" name="current_password" placeholder="Current Password" class="form-control" id="current_password">
+                                    <div class="password_field">
+                                        <input type="password" name="current_password" placeholder="Current Password" class="form-control" id="current_password">
+                                        <i class="fa-regular fa-eye password_icon1" id="password_icon1" onclick="toggle_password('current_password','password_icon1')"></i>
+                                    </div>
                                     <div class="row">
-                                        <div class="col-sm-6">
-                                            <input type="text" name="new_password" placeholder="New Password" class="form-control" id="new_password">
+                                        <div class="col-sm-6 password_field">
+                                            <input type="password" name="new_password" placeholder="New Password" class="form-control" id="new_password">
+                                            <i class="fa-regular fa-eye password_icon2" id="password_icon2" onclick="toggle_password('new_password','password_icon2')"></i>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <input type="text" name="confirm_password" placeholder="Confirm Password" class="form-control" id="confirm_password">
+                                        <div class="col-sm-6 password_field">
+                                            <input type="password" name="confirm_password" placeholder="Confirm Password" class="form-control" id="confirm_password">
+                                            <i class="fa-regular fa-eye password_icon2" id="password_icon3" onclick="toggle_password('confirm_password','password_icon3')"></i>
                                         </div>
                                     </div>
                                     <div class="button_position">
@@ -173,7 +177,7 @@ include '../include/navbar.php';
                     <form method="post" class="col-sm-3">
                         <div class="search-box search">
                             <button type="submit" class="search_button" name="search"><i class="fa-solid fa-magnifying-glass"></i></button>
-                            <input type="text" class="form-control search_input" placeholder="Search&hellip;" name="search_text">
+                            <input type="text" class="form-control" placeholder="Search&hellip;" name="search_text">
                         </div>
                     </form>
                 </div>
@@ -223,6 +227,7 @@ include '../include/navbar.php';
                         }
                     }
                 }
+                mysqli_stmt_close($stmt);
                 ?>
                     </tbody>
                 </table>
@@ -233,5 +238,5 @@ include '../include/navbar.php';
         </div>
     
     <script src="../../external/bootstrap/bootstrap.min.js"></script>
-    <script src="../../js/prof.js"></script>
+    <script src="../../js/profile.js"></script>
 </body>

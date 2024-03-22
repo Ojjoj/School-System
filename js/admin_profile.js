@@ -60,3 +60,17 @@ function compare_password(new_password, confirm_password, matching_password_msg 
         return true;
     }
 }
+
+function toggle_password(password_field_id, password_icon_id){
+    let password_field = document.getElementById(password_field_id);
+    let password_icon  = document.getElementById(password_icon_id);
+
+    if(password_field.type == "password"){
+        password_field.type = "text";
+    }
+    else{
+        password_field.type = "password";
+    }
+    password_icon.classList.toggle("fa-eye-slash");   
+    password_icon.classList.toggle("fa-eye");   
+}

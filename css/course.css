@@ -1,0 +1,113 @@
+.content{
+    padding: 25px;
+}
+
+#title{
+    margin-top: 30px;
+}
+
+.search-box {
+    position: relative;
+    margin-right: 20px;
+}
+
+.search-box input {
+    height: 40px;
+    border-radius: 20px;
+    padding-left: 35px;
+}
+
+.search-box i {
+    color: #a0a5b1;
+    position: absolute;
+    font-size: 19px;
+    top: 10px;
+    left: 10px;
+    cursor: pointer;
+}
+
+.search-box i:hover{
+    color: #ddd;
+}
+
+#select_year{
+    width: 130px;
+    border: none;
+    float: right;
+    margin-right: 20px;
+}
+
+/* #select_year:focus {
+    outline: none !important;
+    border-color: transparent !important; 
+  } */
+
+.card{
+    box-shadow: 1px 1px 3px #a0a5b1;
+}
+
+#courses{
+    margin-top: 50px;
+}
+
+#courses a{
+    text-decoration: none;
+    color: inherit;
+}
+
+.course{
+    margin-bottom: 15px;
+}
+
+.card img{
+    width: 100%;
+    height: 100%;
+    border-radius: 0.34rem;
+    object-fit: cover;
+}
+
+.course_info{
+    padding: 5px 5px 0 0px;
+}
+
+.course_info .course_name, .course_info .course_name .modification{
+    display: flex;
+    justify-content: space-between;
+    align-items:start;
+}
+
+.course_info .course_name i{
+    width: 5%;
+    height: 5%;
+    color:#a0a5b1;
+    margin-left: 15px;
+}
+
+.course_info .course_teacher{
+    margin-top: -10px;
+    color: #777;
+    font-size: 14px;
+}
+
+.add_course{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+}
+
+.add_course i, .add_course span{
+    color: #a0a5b1;
+    margin-right: 5px;
+}
+
+#add_course{
+    border-color: #ddd;
+    background-color: rgba(246, 246, 246,0.1);
+    box-shadow:none;
+}
+
+#add_course:hover{
+    background-color: rgba(246, 246, 246,0.9);
+
+}
