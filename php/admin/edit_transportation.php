@@ -108,7 +108,7 @@ if (isset($_GET["edit"])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bus</title>
+    <title>Edit Bus</title>
     <link href="../../external/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="../../external/fontawesome/css/all.min.css" rel="stylesheet">
     <link href="../../external/fontawesome/css/fontawesome.min.css" rel="stylesheet">

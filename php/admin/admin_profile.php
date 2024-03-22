@@ -110,5 +110,6 @@ if($check_password){
       </form>
     </div>
     
+    <script src="../../external/bootstrap/bootstrap.min.js"></script>
     <script src="../../js/admin_profile.js"></script>
 </body>

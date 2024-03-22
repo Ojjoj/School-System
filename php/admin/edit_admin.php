@@ -26,7 +26,7 @@ if(isset($_POST['edit'])){
 ?>
 <!DOCTYPE html>
 <head lang="en">
-    <title>edit admin</title>
+    <title>Edit Admin</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
@@ -62,5 +62,6 @@ if(isset($_POST['edit'])){
       </form>
     </div>
 
+    <script src="../../external/bootstrap/bootstrap.min.js"></script>
     <script src="../../js/edit_admin.js"></script>
 </body>

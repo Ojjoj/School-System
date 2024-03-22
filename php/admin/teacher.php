@@ -2,29 +2,20 @@
 include_once '../include/admin_checkout.php';
 include_once '../include/connect.php';
 
-function calculate_age($dateOfBirth)
-{
-    $dob = new DateTime($dateOfBirth);
-    $now = new DateTime();
-    $age = $now->diff($dob);
-    return $age->y;
-}
-
-$studentsPerPage = 10;
+$teachersPerPage = 10;
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
-$offset = ($page - 1) * $studentsPerPage;
+$offset = ($page - 1) * $teachersPerPage;
 
-
-$sql = "SELECT student_id, first_name, last_name, date_of_birth, gender, country FROM student";
-$sql_total_students = "SELECT COUNT(*) AS total FROM student";
+$sql = "SELECT teacher_id, first_name, last_name, job_description FROM teacher";
+$sql_total_teachers = "SELECT COUNT(*) AS total FROM teacher";
 
 if (isset($_GET['search'])) {
     $search_query = mysqli_real_escape_string($connection, $_GET['search']);
-    $sql .= " WHERE first_name LIKE '%$search_query%' OR last_name LIKE '%$search_query%' OR country LIKE '%$search_query%'";
-    $sql_total_students .= " WHERE first_name LIKE '%$search_query%' OR last_name LIKE '%$search_query%' OR country LIKE '%$search_query%'";
+    $sql .= " WHERE first_name LIKE '%$search_query%' OR last_name LIKE '%$search_query%' OR job_description LIKE '%$search_query%'";
+    $sql_total_teachers .= " WHERE first_name LIKE '%$search_query%' OR last_name LIKE '%$search_query%' OR job_description LIKE '%$search_query%'";
 }
 
-$sql .= " LIMIT $offset, $studentsPerPage";
+$sql .= " LIMIT $offset, $teachersPerPage";
 
 if ($stmt = mysqli_prepare($connection, $sql)) {
     mysqli_stmt_execute($stmt);
@@ -34,13 +25,15 @@ if ($stmt = mysqli_prepare($connection, $sql)) {
 }
 
 if (isset($_GET['delete'])) {
-
     $delete_id = $_GET['delete'];
-
-    $sql = "DELETE FROM student WHERE student_id = $delete_id";
-    mysqli_query($connection, $sql);
-
-    header('location:student.php');
+    $sql_delete = "DELETE FROM teacher WHERE teacher_id = ?";
+    if ($stmt_delete = mysqli_prepare($connection, $sql_delete)) {
+        mysqli_stmt_bind_param($stmt_delete, "i", $delete_id);
+        mysqli_stmt_execute($stmt_delete);
+        header('location:teacher.php');
+    } else {
+        echo "Error deleting record: " . mysqli_error($connection);
+    }
 }
 
 ?>
@@ -51,11 +44,11 @@ if (isset($_GET['delete'])) {
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Student</title>
+    <title>Teachers</title>
     <link href="../../external/bootstrap/bootstrap.min.css" rel="stylesheet">
     <link href="../../external/fontawesome/css/all.min.css" rel="stylesheet">
     <link href="../../external/fontawesome/css/fontawesome.min.css" rel="stylesheet">
-    <link href="../../css/student.css" rel="stylesheet">
+    <link href="../../css/teacher.css" rel="stylesheet">
 </head>
 
 <?php
@@ -71,10 +64,10 @@ include '../include/navbar.php';
             <div class="container mt-3">
                 <?php
                 if ($result) {
-                    $resultTotalStudents = mysqli_query($connection, $sql_total_students);
-                    $rowTotalStudents = mysqli_fetch_assoc($resultTotalStudents);
-                    $total_students = $rowTotalStudents['total'];
-                    mysqli_free_result($resultTotalStudents);
+                    $resultTotalTeachers = mysqli_query($connection, $sql_total_teachers);
+                    $rowTotalTeachers = mysqli_fetch_assoc($resultTotalTeachers);
+                    $total_teachers = $rowTotalTeachers['total'];
+                    mysqli_free_result($resultTotalTeachers);
                     mysqli_close($connection);
                 ?>
                     <div class="row">
@@ -102,11 +95,11 @@ include '../include/navbar.php';
                     <div class="table-title">
                         <div class="row">
                             <div class="col-sm-8">
-                                <h2><b>Students</b></h2>
+                                <h2><b>Teachers</b></h2>
                             </div>
                             <div class="col-sm-4">
                                 <div class="search-box">
-                                    <form id="searchForm" action="student.php" method="GET">
+                                    <form id="searchForm" action="teacher.php" method="GET">
                                         <i class="fa-solid fa-magnifying-glass" onclick="submit_form()"></i>
                                         <input type="text" class="form-control" name="search" id="searchInput" placeholder="Search&hellip;" value=<?php echo $_GET["search"] ?? ""; ?>>
                                     </form>
@@ -119,50 +112,45 @@ include '../include/navbar.php';
                             <tr>
                                 <th>#</th>
                                 <th>First Name <i class="fa fa-sort"></i></th>
-                                <th>Last Name</th>
-                                <th>Age <i class="fa fa-sort"></i></th>
-                                <th>Gender</th>
-                                <th>Country <i class="fa fa-sort"></i></th>
+                                <th>Last Name <i class="fa fa-sort"></i></th>
+                                <th>Job Description</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php while ($row = mysqli_fetch_assoc($result)) : ?>
                                 <tr>
-                                    <td><?php echo $row['student_id']; ?></td>
+                                    <td><?php echo $row['teacher_id']; ?></td>
                                     <td><?php echo $row['first_name']; ?></td>
                                     <td><?php echo $row['last_name']; ?></td>
-                                    <td><?php echo calculate_age($row['date_of_birth']); ?></td>
-                                    <td><?php echo $row['gender']; ?></td>
-                                    <td><?php echo $row['country']; ?></td>
+                                    <td><?php echo $row['job_description']; ?></td>
                                     <td>
-                                        <a href="view_student.php?view=<?php echo $row['student_id']; ?>" class="view" title="View" name="view" data-toggle="tooltip">
+                                        <a href="view_teacher.php?view=<?php echo $row['teacher_id']; ?>" class="view" title="View" name="view" data-toggle="tooltip">
                                             <i class="fa-solid fa-eye"></i>
                                         </a>
-                                        <a href="edit_student.php?edit=<?php echo $row['student_id']; ?>" class="edit" title="Edit" name="edit" data-toggle="tooltip">
+                                        <a href="edit_teacher.php?edit=<?php echo $row['teacher_id']; ?>" class="edit" title="Edit" name="edit" data-toggle="tooltip">
                                             <i class="fa-solid fa-pencil"></i>
                                         </a>
-                                        <a href="student.php?delete=<?php echo $row['student_id']; ?>" class="delete" title="Delete" name="delete" data-toggle="tooltip" onclick="return confirm('Delete this student?');">
+                                        <a href="teacher.php?delete=<?php echo $row['teacher_id']; ?>" class="delete" title="Delete" name="delete" data-toggle="tooltip" onclick="return confirm('Delete this teacher?');">
                                             <i class="fa-solid fa-trash"></i>
                                         </a>
                                     </td>
                                 </tr>
                             <?php endwhile; ?>
-
                         </tbody>
                     </table>
                     <?php
 
-                    $totalPages = ceil($total_students / $studentsPerPage);
-                    $current_entries_start = min($total_students, $offset + 1);
-                    $current_entries_end = min($total_students, $offset + $studentsPerPage);
+                    $totalPages = ceil($total_teachers / $teachersPerPage);
+                    $current_entries_start = min($total_teachers, $offset + 1);
+                    $current_entries_end = min($total_teachers, $offset + $teachersPerPage);
 
-                    if ($current_entries_end < $offset + $studentsPerPage) {
-                        $studentsPerPage = $current_entries_end - $offset;
+                    if ($current_entries_end < $offset + $teachersPerPage) {
+                        $teachersPerPage = $current_entries_end - $offset;
                     } ?>
 
                     <div class='clearfix'>
-                        <div class='hint-text'>Showing <b><?php echo $studentsPerPage ?></b> out of <b><?php echo $total_students ?></b> entries</div>
+                        <div class='hint-text'>Showing <b><?php echo $teachersPerPage ?></b> out of <b><?php echo $total_teachers ?></b> entries</div>
 
                         <?php
                         // Calculate start and end pages for pagination sliding window
@@ -198,13 +186,12 @@ include '../include/navbar.php';
                     </div>
                 <?php } ?>
                 <div class="text-center">
-                    <a href="add_student.php" class="btn btn-primary rounded-pill px-3">Add Student</a>
+                    <a href="add_teacher.php" class="btn btn-primary rounded-pill px-3">Add Teacher</a>
                 </div>
                 </div>
             </div>
-            <script src="../../js/student.js"></script>
+            <script src="../../js/teacher.js"></script>
             <script src="../../external/bootstrap/bootstrap.min.js"></script>
 </body>
-
 
 </html>
