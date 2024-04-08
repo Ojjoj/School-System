@@ -33,20 +33,93 @@
     display: none;
 }
 
-.teacher_info select{
-    width: 500px;
-}
-
-.add_assistant{
+.select_assistant, .select_student{
     display: flex;
     justify-content: start;
     align-items: center;
 }
 
-.add_assistant i{
+.select_assistant i, .select_student i, .added_assistant i{
     margin-left: 20px;
     color: #888;
     border: 2px solid #888;
     padding: 5px;
     border-radius: 50%;
+}
+
+.assistant, .student{
+    width:90%;
+    position: relative;
+}
+
+.add_student{
+    display: flex;
+    justify-content: center;
+}
+
+.teacher{
+    position: relative;
+}
+.teacher .select, .assistant .select, .student .select{
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow-y: scroll;
+    max-height: 74px;
+    display: none;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 40px;
+}
+
+.select::-webkit-scrollbar {
+    display: none;
+}
+
+.select .teacher_option, .select .assistant_option, .select .student_option{
+    margin: 0;
+    padding-left: 15px;
+    background-color: white;
+}
+
+.select .teacher_option:hover, .select .assistant_option:hover, .select .student_option:hover{
+    background-color: #0d6efd;;
+    color:white;
+}
+
+#selected_assistant{
+    margin: 10px 0 0 5px;
+}
+
+.added_assistant{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.added_assistant div{
+    width:25%;
+}
+.added_assistant i{
+    padding: 0 1px;
+    border-radius: 50%;
+}
+
+table i{
+    color:#888 ;
+}
+
+.add_course{
+    text-align: center;
+    margin-top: 20px;
+}
+
+.add_course button{
+    width: 100px;
+    height: 40px;
+    padding-top: 3px;
+    color: white;
+    margin: 20px 0 0 0 ;
+    border-radius: 5px;
+    background-color:#3b3b3d;
+    cursor: pointer;
 }

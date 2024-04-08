@@ -1,5 +1,16 @@
 <?php
 include_once '../include/connect.php';
+
+// if(isset($_POST('delete_course'))){
+//     if (isset($_GET['delete'])) {
+//         $delete_id = $_GET['delete'];
+//     $sql = "DELETE FROM course WHERE id = ?";
+//     if ($stmt = mysqli_prepare($connection, $sql)) {
+//         mysqli_stmt_bind_param($stmt, "s", $delete_id);
+//         mysqli_stmt_execute($stmt);
+//     }
+// }
+
 ?>
 
 <!DOCTYPE html>
@@ -74,13 +85,14 @@ include '../include/navbar.php';
                             </div>
                             <div class="course_info">
                                 <div class="course_name">
+                                    <input type="hidden" id=<?php echo $data['course_id']?>>
                                     <h6><?php echo $data['course_name']?></h6>
                                     <div class="modification">
-                                        <a href="edit_course.php" class="edit" title="Edit" name="edit" data-toggle="tooltip">
+                                        <a href="edit_course.php?edit=<?php echo $data['course_id']; ?>" class="edit" title="Edit" name="edit" data-toggle="tooltip">
                                             <i class="fa-solid fa-pencil"></i>
                                         </a>
-                                        <a href="course.php" class="delet" title="Delete" name="delete" data-toggle="tooltip">
-                                            <i class="fa-solid fa-circle-minus"></i>                            
+                                        <a href="#" title="Delete" name="delete" data-toggle="tooltip" id="<?php echo $data['course_id']; ?>">
+                                            <i class="fa-solid fa-circle-minus" id="delete_course"></i>                            
                                         </a>
                                     </div>
                                 </div>
@@ -92,9 +104,8 @@ include '../include/navbar.php';
                     </a>
                 </div>
                 <?php
-                            }}}}
-                            mysqli_stmt_close($stmt);
-
+                    }}}}
+                    mysqli_stmt_close($stmt);
                 ?> 
                 
                 <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 ">
@@ -102,17 +113,45 @@ include '../include/navbar.php';
                         <div class="course">
                             <div class="card" style="height: 250px;" id="add_course">
                                 <div class="add_course">
-                                        <i class="fa-solid fa-plus"></i><span>New</span>
+                                    <i class="fa-solid fa-plus"></i><span>New</span>
                                 </div>
                             </div>
                         </div>
                     </a>
                 </div>
-
             </div>
         </div>
     </div>
 
+    <div data-bs-toggle="modal" data-bs-target="#my_modal" style="color:black">hsdfghyjuii</div>
+        <div class="modal fade" tabindex="-1" data-bs-backdrop="static" id="my_modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Delete Course</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="container-fluid">
+                            Are you sure you want to delete this course?
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="text-end">
+                            <form method="post">
+                                <button type="button" class="btn btn-danger btn-sm rounded-0" name="delete_course" data-id="">Delete</button>
+                                <button type="button" class="btn btn-secondary btn-sm rounded-0" data-bs-dismiss="modal">Cancel</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../external/bootstrap/bootstrap.js"></script>
+    <script src="../../external/jquery/jquery-3.7.1.min.js"></script>
     <script src="../../js/course.js"></script>
+    <script src="../../js/delete_course.js"></script>
 </body>
 </html>

@@ -1,6 +1,19 @@
 <?php
 include_once '../include/admin_checkout.php'; 
 include_once '../include/connect.php';
+if(isset($_POST['add_course'])){
+    if(isset($_POST["assistants"]) && isset($_POST["students"])){
+        $assistants = $_POST["assistants"];
+        $students = $_POST["students"];
+        foreach ($assistants as $assistant) {
+            echo "Assistant ID: " . $assistant[0] . ", Assistant Name: " . $assistant[1] . "<br>";
+        }
+    }
+}
+
+
+
+
 ?>
 
 <!DOCTYPE html>
@@ -26,7 +39,7 @@ include '../include/navbar.php';
         <div class="col-md-2">
             <?php include '../include/sidebar.php'; ?>
         </div>
-        <div class="col-md-10" style="margin: 30px 0 30px 0;">
+        <div class="col-md-10" style="margin: 30px 0 10px 0;">
             <form action="" method="POST" enctype="multipart/form-data">
                 <h2>Course Information</h2>
                 <hr>
@@ -56,69 +69,68 @@ include '../include/navbar.php';
 
                 <h2>Add Teacher</h2>
                 <hr>
-                <div class="row teacher_info" style="margin-bottom: 3   0px;">
+                <div class="row teacher" style="margin-bottom: 30px;">
                     <div class="col-md-6 col-sm-12">
-                        <label class="form-label">Choose Teacher</label>
-                        <select class="form-select" id="teacher" name="teacher">
-                            <option value="0" disabled selected>Select Teacher</option>
-                            <?php 
-                                $sql = "SELECT * FROM teacher";
-                                if($stmt = mysqli_prepare($connection, $sql)){
-                                    if(mysqli_stmt_execute($stmt)){
-                                        $result = mysqli_stmt_get_result($stmt);
-                                        if (mysqli_num_rows($result) > 0) {
-                                            while($data = mysqli_fetch_array($result)){
-                                                echo "<option value='".$data['teacher_id']."'>".$data['teacher_name']."</option>";
-                                            }
-                                        }
-                                    }
-                                }
-                                mysqli_stmt_close($stmt);
-                            ?>
-                        </select>
-                    </div>
-                    <div class="row col-md-6 col-sm-12">
-                        <div>
-                            <label class="form-label">Choose Assistant</label>
-                            <div class="add_assistant">
-                                <select class="form-select" id="assistant" name="assistant">
-                                    <option value="0" disabled selected>Select Assistant</option>
-                                    <?php 
-                                        $sql = "SELECT * FROM assistant";
-                                        if($stmt = mysqli_prepare($connection, $sql)){
-                                            if(mysqli_stmt_execute($stmt)){
-                                                $result = mysqli_stmt_get_result($stmt);
-                                                if (mysqli_num_rows($result) > 0) {
-                                                    while($data = mysqli_fetch_array($result)){
-                                                        echo "<option value='".$data['assistant_id']."'>".$data['assistant_name']."</option>";
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        mysqli_stmt_close($stmt);
-                                    ?>
-                                </select>
-                                <div>
-                                    <i class="fa-solid fa-plus"></i>
-                                </div>
-                            </div>
+                        <label class="form-label" for="select_teacher">Choose Teacher</label>
+                        <div class="teacher">
+                            <input type="text" class="form-control" id="select_teacher" name="select_teacher" placeholder="select a teacher">
+                            <div class="select" id="select_teacher_options"></div>
                         </div>
                     </div>
-                </div>
+                    <div class="col-md-6 col-sm-12">
+                        <label class="form-label" for="select_assistant">Choose Assistant</label>
+                        <div class="select_assistant">
+                            <div class="assistant">
+                                <input type="text" class="form-control" id="select_assistant" name="select_assistant" placeholder="select an assistant">
+                                <div class="select" id="select_assistant_options"></div>
+                            </div>
+                            <div>
+                                <i class="fa-solid fa-plus" id="add_assistant" onclick="add_assistant(this)"></i>
+                            </div>
+                        </div>
+                        <div id="selected_assistant"></div>
+                    </div>
+                </div>             
 
                 <h2>Add Student</h2>
                 <hr>
-                <div style="margin-bottom: 20px;">
+                <div class="row" style="margin-bottom: 20px;">
+                    <div class="col-md-6 col-sm-12">
+                        <table class="table table-striped table-hover table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>First name</th>
+                                    <th>Last name</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <div class="select_student">
+                            <div class="student">
+                                <input type="text" class="form-control" id="select_student" name="select_student" placeholder="select a student">
+                                <div class="select" id="select_student_options"></div>
+                            </div>
+                            <div>
+                                <i class="fa-solid fa-plus" id="add_student" onclick="add_student(this)"></i>
+                            </div>
+                        </div>
 
+                    </div>
+                </div>             
+                <div class="add_course">
+                    <button name="add_course" onclick="save_to_databse()">Add Course</button>
                 </div>
-                
-                
             </form>
         </div>
     </div>
 
     <script src="../../external/bootstrap/bootstrap.min.js"></script>
     <script src="../../js/add_course.js"></script>
-</body>
-
+    <script src="../../external/jquery/jquery-3.7.1.min.js"></script>
+    <script src="../../js/live_search.js"></script>
+    </body>
 </html>
