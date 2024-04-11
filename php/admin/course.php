@@ -1,16 +1,5 @@
 <?php
 include_once '../include/connect.php';
-
-// if(isset($_POST('delete_course'))){
-//     if (isset($_GET['delete'])) {
-//         $delete_id = $_GET['delete'];
-//     $sql = "DELETE FROM course WHERE id = ?";
-//     if ($stmt = mysqli_prepare($connection, $sql)) {
-//         mysqli_stmt_bind_param($stmt, "s", $delete_id);
-//         mysqli_stmt_execute($stmt);
-//     }
-// }
-
 ?>
 
 <!DOCTYPE html>
@@ -77,7 +66,7 @@ include '../include/navbar.php';
                         if (mysqli_num_rows($result) > 0) {
                             while($data = mysqli_fetch_array($result)){
                 ?>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 ">
+                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 " id=<?php echo 'course'. $data['course_id']?>>
                     <a href="view_course.php">
                         <div class="course">
                             <div class="card" style="height: 250px;">
@@ -91,8 +80,8 @@ include '../include/navbar.php';
                                         <a href="edit_course.php?edit=<?php echo $data['course_id']; ?>" class="edit" title="Edit" name="edit" data-toggle="tooltip">
                                             <i class="fa-solid fa-pencil"></i>
                                         </a>
-                                        <a href="#" title="Delete" name="delete" data-toggle="tooltip" id="<?php echo $data['course_id']; ?>">
-                                            <i class="fa-solid fa-circle-minus" id="delete_course"></i>                            
+                                        <a href="#" title="Delete" name="delete" data-toggle="tooltip" id="<?php echo $data['course_id'];?>" data-bs-toggle="modal" data-bs-target="#my_modal">
+                                            <i class="fa-solid fa-circle-minus delete_course"></i>                            
                                         </a>
                                     </div>
                                 </div>
@@ -139,7 +128,7 @@ include '../include/navbar.php';
                     <div class="modal-footer">
                         <div class="text-end">
                             <form method="post">
-                                <button type="button" class="btn btn-danger btn-sm rounded-0" name="delete_course" data-id="">Delete</button>
+                                <button type="button" class="btn btn-danger btn-sm rounded-0" data-bs-dismiss="modal" id="delete">Delete</button>
                                 <button type="button" class="btn btn-secondary btn-sm rounded-0" data-bs-dismiss="modal">Cancel</button>
                             </form>
                         </div>
