@@ -22,11 +22,11 @@ include '../include/navbar.php';
 
 <body>
     <div class="row">
-        <div class="col-md-2 d-md-block d-non">
+        <div class="col-md-2 d-md-block d-non" style="width:15%">
             <?php include '../include/sidebar.php'; ?>
         </div>
 
-        <div class="col-md-10 content">
+        <div class="col-md-10 content" style="width:85%; padding-right:35px;">
             <div>
                 <div class="row" id="title">
                     <div class="col-sm-3">
@@ -66,8 +66,8 @@ include '../include/navbar.php';
                         if (mysqli_num_rows($result) > 0) {
                             while($data = mysqli_fetch_array($result)){
                 ?>
-                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 " id=<?php echo 'course'. $data['course_id']?>>
-                    <a href="view_course.php">
+                <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12" id=<?php echo 'course'. $data['course_id']?>>
+                    <a href="view_course.php?view_course=<?php echo $data['course_id']; ?>">
                         <div class="course">
                             <div class="card" style="height: 250px;">
                                 <img src="<?php echo $data['image_path']?>" alt="image not found" class="img-fluid">
@@ -77,7 +77,7 @@ include '../include/navbar.php';
                                     <input type="hidden" id=<?php echo $data['course_id']?>>
                                     <h6><?php echo $data['course_name']?></h6>
                                     <div class="modification">
-                                        <a href="edit_course.php?edit=<?php echo $data['course_id']; ?>" class="edit" title="Edit" name="edit" data-toggle="tooltip">
+                                        <a href="edit_course.php?edit_course=<?php echo $data['course_id']; ?>" class="edit" title="Edit" name="edit" data-toggle="tooltip">
                                             <i class="fa-solid fa-pencil"></i>
                                         </a>
                                         <a href="#" title="Delete" name="delete" data-toggle="tooltip" id="<?php echo $data['course_id'];?>" data-bs-toggle="modal" data-bs-target="#my_modal">
