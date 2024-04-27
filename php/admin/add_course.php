@@ -1,15 +1,16 @@
 <?php
 include_once '../include/admin_checkout.php'; 
 include_once '../include/connect.php';
-if(isset($_POST['add_course'])){
-    if(isset($_POST["assistants"]) && isset($_POST["students"])){
-        $assistants = $_POST["assistants"];
-        $students = $_POST["students"];
-        foreach ($assistants as $assistant) {
-            echo "Assistant ID: " . $assistant[0] . ", Assistant Name: " . $assistant[1] . "<br>";
-        }
-    }
-}
+
+// if(isset($_POST['add_course'])){
+//     if(isset($_POST["assistants"]) && isset($_POST["students"])){
+//         $assistants = $_POST["assistants"];
+//         $students = $_POST["students"];
+//         foreach ($assistants as $assistant) {
+//             echo "Assistant ID: " . $assistant[0] . ", Assistant Name: " . $assistant[1] . "<br>";
+//         }
+//     }
+// }
 
 
 
@@ -122,7 +123,7 @@ include '../include/navbar.php';
                     </div>
                 </div>             
                 <div class="add_course">
-                    <button name="add_course" onclick="save_to_databse()">Add Course</button>
+                    <button name="add_course" onclick="save_to_database(event)">Add Course</button>
                 </div>
             </form>
         </div>

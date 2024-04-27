@@ -1,5 +1,7 @@
 <?php
 include_once '../include/connect.php';
+include_once '../include/admin_checkout.php';
+
 ?>
 
 <!DOCTYPE html>

@@ -24,7 +24,7 @@ function add_assistant(){
         if(assistant_name !== ""){
             if (!assistant_list.has(assistant_id)) 
                 assistant_list.set(assistant_id, assistant_name);
-            else
+            else 
                 return false;
         }
     }
@@ -139,17 +139,35 @@ function add_student(){
     student_name = '';
 }    
 
+function get_keys(list){
+    let keys = [];
+    list.forEach((value, key) =>{
+        let id = key.replace('assistant', '');
+        keys.push(parseInt(id))
+    });
+    return keys
+}
 
-function save_to_database(){
-    const assistant_array = Array.from(assistant_list);
-    const student_array = Array.from(student_list);
+function save_to_database(event){
+    event.preventDefault();
+
+    let course_name = document.getElementById('course_name').value;
+    let start_date = document.getElementById('start_date').value;
+    let end_date = document.getElementById('end_date').value;
+
+    console.log(course_name);
+    const assistant_ids = get_keys(assistant_list) 
+    console.log(assistant_ids)
 
     $.ajax({
         type: "POST",
         url: "save_data.php",
+        dataType: 'html',
         data: {
-            assistants: assistant_array,
-            students: student_array
+            course_name: course_name,
+            start_date: start_date,
+            end_date: end_date,
+            assistants: assistant_ids
         },
         success: function(response) {
             console.log("Data saved successfully:", response);

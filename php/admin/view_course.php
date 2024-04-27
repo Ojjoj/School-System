@@ -1,5 +1,7 @@
 <?php 
 include_once '../include/connect.php';
+include_once '../include/admin_checkout.php';
+
 
 function calculate_age($dateOfBirth)
 {
@@ -38,7 +40,7 @@ if(isset($_GET['view_course'])){
             $result = mysqli_stmt_get_result($stmt);
             if (mysqli_num_rows($result) > 0)
                 while($row = mysqli_fetch_array($result)){
-                    $assistant .= $row['first_name']. ' ' . $row['first_name']. ' - ';
+                    $assistant .= $row['first_name']. ' ' . $row['last_name']. ' - ';
                 }
             $assistant = substr($assistant, 0, -2); 
         }
