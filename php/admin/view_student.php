@@ -12,7 +12,7 @@ if (isset($_GET['view'])) {
     if ($stmt) {
         mysqli_stmt_bind_param($stmt, "i", $student_id);
         mysqli_stmt_execute($stmt);
-        mysqli_stmt_bind_result($stmt, $student_id, $first_name, $last_name, $gender, $date_of_birth, $country, $date_of_admission, $father_name, $father_phone, $father_email, $mother_name, $mother_phone, $mother_email, $diagnosis, $medication, $transportation, $bus_id, $other, $status);
+        mysqli_stmt_bind_result($stmt, $student_id, $real_id, $first_name, $last_name, $gender, $date_of_birth, $country, $date_of_admission, $father_name, $father_phone, $father_email, $mother_name, $mother_phone, $mother_email, $diagnosis, $medication, $transportation, $bus_id, $other, $status);
         mysqli_stmt_fetch($stmt);
 
         mysqli_stmt_close($stmt);
@@ -56,6 +56,10 @@ include '../include/navbar.php';
                         <h2>General Information</h2>
                         <hr>
                         <table class="info-table">
+                            <tr>
+                                <td><strong>Student ID</strong></td>
+                                <td><?php echo $real_id ? $real_id : "<span class='text-danger'>Not available</span>"; ?></td>
+                            </tr>
                             <tr>
                                 <td><strong>First Name:</strong></td>
                                 <td><?php echo $first_name ? $first_name : "<span class='text-danger'>Not available</span>"; ?></td>

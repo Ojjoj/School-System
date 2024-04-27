@@ -15,12 +15,12 @@ $page = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 $offset = ($page - 1) * $studentsPerPage;
 
 
-$sql = "SELECT student_id, first_name, last_name, date_of_birth, gender, country FROM student";
+$sql = "SELECT student_id, real_id, first_name, last_name, date_of_birth, gender, country FROM student";
 $sql_total_students = "SELECT COUNT(*) AS total FROM student";
 
 if (isset($_GET['search'])) {
     $search_query = mysqli_real_escape_string($connection, $_GET['search']);
-    $sql .= " WHERE first_name LIKE '%$search_query%' OR last_name LIKE '%$search_query%' OR country LIKE '%$search_query%'";
+    $sql .= " WHERE real_id LIKE '%$search_query%' OR first_name LIKE '%$search_query%' OR last_name LIKE '%$search_query%' OR country LIKE '%$search_query%'";
     $sql_total_students .= " WHERE first_name LIKE '%$search_query%' OR last_name LIKE '%$search_query%' OR country LIKE '%$search_query%'";
 }
 
@@ -129,7 +129,7 @@ include '../include/navbar.php';
                         <tbody>
                             <?php while ($row = mysqli_fetch_assoc($result)) : ?>
                                 <tr>
-                                    <td><?php echo $row['student_id']; ?></td>
+                                    <td><?php echo $row['real_id']; ?></td>
                                     <td><?php echo $row['first_name']; ?></td>
                                     <td><?php echo $row['last_name']; ?></td>
                                     <td><?php echo calculate_age($row['date_of_birth']); ?></td>

@@ -1,17 +1,18 @@
 <?php
-include_once '../include/admin_checkout.php'; 
+include_once '../include/admin_checkout.php';
 include_once '../include/connect.php';
 
 $alert = 'd-none';
 if (isset($_POST['submit'])) {
-    $sql = "INSERT INTO `student` (`first_name`, `last_name`, `gender`, `date_of_birth`, `country`, `date_of_admission`, `father_name`, `father_phone`, `father_email`, `mother_name`, `mother_phone`, `mother_email`, `transportation`, `bus_id`, `diagnosis`, `medication`, `other`, `status`) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO `student` (`real_id`, `first_name`, `last_name`, `gender`, `date_of_birth`, `country`, `date_of_admission`, `father_name`, `father_phone`, `father_email`, `mother_name`, `mother_phone`, `mother_email`, `transportation`, `bus_id`, `diagnosis`, `medication`, `other`, `status`) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = mysqli_prepare($connection, $sql);
 
     if ($stmt) {
-        mysqli_stmt_bind_param($stmt, 'sssssssssssssissss', $first_name, $last_name, $gender, $date_of_birth, $country, $date_of_admission, $father_name, $father_phone, $father_email, $mother_name, $mother_phone, $mother_email, $transportation, $bus, $diagnosis, $medication, $other, $status);
+        mysqli_stmt_bind_param($stmt, 'ssssssssssssssissss', $real_id, $first_name, $last_name, $gender, $date_of_birth, $country, $date_of_admission, $father_name, $father_phone, $father_email, $mother_name, $mother_phone, $mother_email, $transportation, $bus, $diagnosis, $medication, $other, $status);
 
+        $real_id = strtoupper($_POST['first_name'][0]) . strtoupper($_POST['last_name'][0]) . (string)$_POST['date_of_birth'][3] . (string)$_POST['date_of_birth'][6] . (string)$_POST['date_of_birth'][9] . rand(100, 999);
         $first_name = $_POST['first_name'];
         $last_name = $_POST['last_name'];
         $gender = $_POST['gender'];
@@ -46,9 +47,12 @@ if (isset($_POST['submit'])) {
     } else {
         echo "Error preparing statement: " . mysqli_error($connection);
     }
-
-    mysqli_close($connection);
 }
+
+$bus_query = "SELECT bus_id, bus_name FROM bus";
+$bus_result = mysqli_query($connection, $bus_query);
+
+mysqli_close($connection);
 ?>
 
 <!DOCTYPE html>
@@ -176,7 +180,15 @@ include '../include/navbar.php';
                                 <div class="col-md-6">
                                     <label class="form-label">Choose Bus</label>
                                     <select class="form-select" id="bus" name="bus" disabled>
-                                        <option value="1">Select Bus</option>
+                                        <option value="">Select Bus</option>
+                                        <?php
+                                        while ($bus_row = mysqli_fetch_assoc($bus_result)) {
+                                            $selected = ($bus_row['bus_id'] == $bus_id) ? 'selected' : '';
+                                            echo "<option value='" . $bus_row['bus_id'] . "' $selected>" . $bus_row['bus_name'] . "</option>";
+                                        }
+                                        mysqli_free_result($bus_result);
+                                        ?>
+
                                     </select>
                                 </div>
                             </div>

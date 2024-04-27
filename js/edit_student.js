@@ -44,8 +44,9 @@ function populateCountrySelect(selected_country) {
 }
 
 function validateForm() {
-    var selectElement = document.getElementById("bus");
-    if (selectElement.value === "") {
+    var bus = document.getElementById("bus");
+    var transportation = document.getElementById("school_bus");
+    if (transportation.checked && bus.value === "") {
         alert("Please select a bus.");
         return false; 
     }

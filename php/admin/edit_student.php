@@ -57,7 +57,7 @@ if (isset($_GET['edit'])) {
     if ($stmt) {
         mysqli_stmt_bind_param($stmt, "i", $student_id);
         mysqli_stmt_execute($stmt);
-        mysqli_stmt_bind_result($stmt, $student_id, $first_name, $last_name, $gender, $date_of_birth, $country, $date_of_admission, $father_name, $father_phone, $father_email, $mother_name, $mother_phone, $mother_email, $diagnosis, $medication, $transportation, $bus_id, $other, $status);
+        mysqli_stmt_bind_result($stmt, $student_id, $real_id, $first_name, $last_name, $gender, $date_of_birth, $country, $date_of_admission, $father_name, $father_phone, $father_email, $mother_name, $mother_phone, $mother_email, $diagnosis, $medication, $transportation, $bus_id, $other, $status);
         mysqli_stmt_fetch($stmt);
 
         mysqli_stmt_close($stmt);
