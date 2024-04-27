@@ -99,7 +99,7 @@
           <div class="collapse" id="account-collapse">
             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
               <li><a href="../admin/teacher.php" class="nav-link text-white d-inline-flex text-decoration-none rounded">Teachers</a></li>
-              <li><a href="../admin/assistant.php" class="nav-link text-white d-inline-flex text-decoration-none rounded">Assistants</a></li>
+              <li><a href="../admin/add_assistant.php" class="nav-link text-white d-inline-flex text-decoration-none rounded">Assistants</a></li>
             </ul>
           </div>
         </li>

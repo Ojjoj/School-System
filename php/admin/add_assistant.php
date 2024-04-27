@@ -20,7 +20,7 @@ if (isset($_POST['submit'])) {
         $success = mysqli_stmt_execute($stmt);
 
         if ($success) {
-            header('Location: assistant.php?added=true');
+            header('Location: add_assistant.php?added=true');
             exit;
         }
         mysqli_stmt_close($stmt);
@@ -39,7 +39,7 @@ if (isset($_GET['delete'])) {
     mysqli_stmt_execute($stmt_delete_assistant);
     mysqli_stmt_close($stmt_delete_assistant);
 
-    header('location:assistant.php');
+    header('location:add_assistant.php');
     exit;
 }
 
@@ -149,7 +149,7 @@ include '../include/navbar.php';
                                             echo "<td>";
                                             echo '   <a href="view_assistant.php?view=' . $assistant_id . '" class="view" title="View" name="view" data-toggle="tooltip"><i class="fa-solid fa-eye"></i></a>';
                                             echo '   <a href="edit_assistant.php?edit=' . $assistant_id . '" class="edit" title="Edit" name="edit" data-toggle="tooltip"><i class="fa-solid fa-pencil"></i></a>';
-                                            echo '   <a href="assistant.php?delete=' . $assistant_id . '" class="delete" title="Delete" name="delete" data-toggle="tooltip" onclick="return confirm(\'Delete this assistant?\');"><i class="fa-solid fa-trash"></i></a>';
+                                            echo '   <a href="add_assistant.php?delete=' . $assistant_id . '" class="delete" title="Delete" name="delete" data-toggle="tooltip" onclick="return confirm(\'Delete this assistant?\');"><i class="fa-solid fa-trash"></i></a>';
                                             echo "</td>";
                                             echo "</tr>";
                                         }
