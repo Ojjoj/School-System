@@ -4,10 +4,11 @@ let assistant_name;
 let assistant_id;
 let student_name;
 let student_id;
+let assistant_name_value;
+let image_path = "";
 
 function change_image(){
     let course_image = document.getElementById("course_image");
-    let image_file = document.getElementById("image_file");   
     course_image.src = URL.createObjectURL(image_file.files[0]);
 }
 
@@ -18,7 +19,7 @@ function chosen_assistant(p){
 
 function add_assistant(){
     console.log(assistant_list);
-    let assistant_name_value = document.getElementById('select_assistant').value; 
+    assistant_name_value = document.getElementById('select_assistant').value; 
 
     if(assistant_name_value === assistant_name){
         if(assistant_name !== ""){
@@ -33,7 +34,6 @@ function add_assistant(){
             const classes = document.getElementById('select_assistant').classList;
             if (classes.length == 2) {
                 const id = classes[1];
-                classes.remove(classes[1]);
                 if (!assistant_list.has(id))
                     assistant_list.set(id, assistant_name_value);
                 else
@@ -64,11 +64,12 @@ function add_assistant(){
         icon.addEventListener('click', function(){
             div.parentNode.removeChild(div);
             assistant_list.delete(key);
+            console.log(assistant_list);
+            document.getElementById('selected_assistant').value = assistant_name_value;
+            console.log(document.getElementById('selected_assistant').value);
         });
         div.appendChild(icon);
     }); 
-
-    assistant_name = '';
 }    
 
 
@@ -94,7 +95,6 @@ function add_student(){
             const classes = document.getElementById('select_student').classList;
             if (classes.length == 2) {
                 const id = classes[1];
-                classes.remove(classes[1]);
                 if (!student_list.has(id))
                     student_list.set(id, student_name_value);
                 else
@@ -136,7 +136,6 @@ function add_student(){
         tbody.appendChild(newRow);
     });
 
-    student_name = '';
 }    
 
 function get_keys(list){
@@ -148,32 +147,135 @@ function get_keys(list){
     return keys
 }
 
+let success_add = false;
+
 function save_to_database(event){
     event.preventDefault();
 
+    //step 1
+    let formData = new FormData();
+    let image_file = document.getElementById('image_file').files[0];
+    formData.append('image', image_file);
+
+    //step2
     let course_name = document.getElementById('course_name').value;
     let start_date = document.getElementById('start_date').value;
     let end_date = document.getElementById('end_date').value;
 
-    console.log(course_name);
-    const assistant_ids = get_keys(assistant_list) 
-    console.log(assistant_ids)
+    //step3
+    let teacher_classes = document.getElementById('select_teacher').classList;
+    let teacher_id;
+    if (teacher_classes.length == 2){
+        teacher_id = teacher_classes[1].substring(7);
+    }  
+    
+    //step4
+    let assistant_map = new Map();
+    assistant_list.forEach((value,key)=>{
+        let number_key = key.replace('assistant','');
+        assistant_map.set(number_key, value);
+    });
+    let assistat_array = Array.from(assistant_map.entries())
+
+    //step5
+    let student_map = new Map();
+    student_list.forEach((value,key)=>{
+        let number_key = key.replace('student','');
+        student_map.set(number_key, value);
+    });
+    let student_array = Array.from(student_map.entries())
+    console.log("hi")
+    console.log(student_array)
+
 
     $.ajax({
         type: "POST",
         url: "save_data.php",
         dataType: 'html',
-        data: {
-            course_name: course_name,
-            start_date: start_date,
-            end_date: end_date,
-            assistants: assistant_ids
-        },
+        processData: false, 
+        contentType: false,
+        data: formData,
         success: function(response) {
-            console.log("Data saved successfully:", response);
+            console.log("Image moved successfully:", response);
+            image_path = response;
+            $.ajax({
+                type: "POST",
+                url: "save_data.php",
+                dataType: 'html',
+                data: {
+                    course_name: course_name,
+                    start_date: start_date,
+                    end_date: end_date,
+                    image_path: image_path,
+                    teacher_id: teacher_id,
+                },
+                success: function(response) {
+                    console.log("Data saved successfully:", response);
+                    if(response != ""){
+                        success_add = true;
+                        $.ajax({
+                            type: "POST",
+                            url: "save_data.php",
+                            dataType: 'html',
+                            data: {
+                                course_id: response,
+                                assistants: JSON.stringify(assistat_array)
+                            },
+                            success: function(response) {
+                                console.log("Data saved successfully:", response);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error("Error saving data:", error);
+                            }
+                        });
+
+                        $.ajax({
+                            type: "POST",
+                            url: "save_data.php",
+                            dataType: 'html',
+                            data: {
+                                course_id: response,
+                                students: JSON.stringify(student_array)
+                            },
+                            success: function(response) {
+                                console.log("Data saved successfully:", response);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error("Error saving data:", error);
+                            }
+                        });
+                        localStorage.setItem('success_add', 'true');
+                        location.reload();  
+                    }
+                    else{
+                        localStorage.setItem('success_add', 'false');
+                        location.reload();
+                          
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error saving data:", error);
+                }
+            }); 
         },
         error: function(xhr, status, error) {
             console.error("Error saving data:", error);
         }
     });
+
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    
+    if (localStorage.getItem('success_add') === 'true') {
+        let success = document.getElementById('success');
+        success.style.display = 'block';
+        localStorage.removeItem('success_add');
+    }
+    else if (localStorage.getItem('success_add') === 'false') {
+        let fail = document.getElementById('fail');
+        fail.style.display = 'block';
+        localStorage.removeItem('success_add');
+    }
+    
+});

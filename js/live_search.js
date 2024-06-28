@@ -9,8 +9,17 @@ $('document').ready(function(){
              $('#select_teacher_options').hide();
         }, 300);                
         if(teacher_names[0] != 'no result found'){
-            if(teacher_names[0][0].toLowerCase() == $(this).val().charAt(0).toLowerCase())
-                $(this).val(teacher_names[0]);
+            if(teacher_names[0]['full_name'].charAt(0).toLowerCase() == $(this).val().charAt(0).toLowerCase()){
+                $(this).val(teacher_names[0]['full_name']);
+                const classes = document.getElementById('select_teacher').classList;
+                if (classes.length == 2) {
+                    classes.replace(classes[1], "teacher" + teacher_names[0]['id']); 
+                }
+                else{
+                    $(this).addClass("teacher"+teacher_names[0]['id']);
+                }
+            }
+            
             else
                 $(this).val('');
         } 
@@ -30,16 +39,24 @@ $('document').ready(function(){
 
             success:function(data){
                 teacher_names = data
-                let i = 0
                 $('#select_teacher_options').empty();   
                 data.forEach(function(element) {
-                    i++;
-                    $('#select_teacher_options').append('<p class="teacher_option" id="teacher' + i + '">' + element +'</p>');
+                    $('#select_teacher_options').append('<p class="teacher_option" id="teacher' + element.id + '">' + element.full_name +'</p>');
                 });
             }
         });
     });
 
+    $(document).on('click', '.teacher_option', function(){
+        $('#select_teacher').val(this.innerText);
+        const classes = document.getElementById('select_teacher').classList;
+        if (classes.length == 2) {
+            classes.replace(classes[1], $(this).attr('id')); 
+        }
+        else{
+            $("#select_teacher").addClass( $(this).attr('id'));
+        }
+    });
     // assistant names -------------------------------------------
     $('#select_assistant').blur(function(){
         setTimeout(() => {
@@ -48,7 +65,12 @@ $('document').ready(function(){
         if(assistant_names[0]['full_name'] != 'no result found'){
             if(assistant_names[0]['full_name'].charAt(0).toLowerCase() == $(this).val().charAt(0).toLowerCase()){
                 $(this).val(assistant_names[0]['full_name']);
-                $(this).addClass("assistant"+assistant_names[0]['id']);
+                const classes = document.getElementById('select_assistant').classList;
+                if (classes.length == 2) {
+                    classes.replace(classes[1], "assistant" + assistant_names[0]['id']);                }
+                else{
+                    $(this).addClass("assistant"+assistant_names[0]['id']);
+                }
             }  
             else
                 $(this).val('');
@@ -57,9 +79,7 @@ $('document').ready(function(){
             $(this).val('');  
     });
 
-    $(document).on('click', '.teacher_option', function(){
-        $('#select_teacher').val(this.innerText)
-    });
+    
 
     $('#select_assistant').on('click keyup',function(){
         $('#select_assistant_options').show()
@@ -96,7 +116,13 @@ $('document').ready(function(){
         if(student_names[0]['full_name'] != 'no result found'){
             if(student_names[0]['full_name'].charAt(0).toLowerCase() == $(this).val().charAt(0).toLowerCase()){
                 $(this).val(student_names[0]['full_name']);
-                $(this).addClass("student"+student_names[0]['id']);
+                const classes = document.getElementById('select_student').classList;
+                if (classes.length == 2) {
+                    classes.replace(classes[1], "student" + studnet_names[0]['id']);                
+                }
+                else{
+                    $(this).addClass("student"+student_names[0]['id']);
+                }
             }  
             else
                 $(this).val('');
