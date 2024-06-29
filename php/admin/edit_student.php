@@ -144,8 +144,8 @@ include '../include/navbar.php';
                                 <div class="col-md-6">
                                     <label for="status" class="form-label">Status</label>
                                     <select class="form-select" id="status" name="status">
-                                        <option value="active" <?php if ($status == 'active') echo 'selected'; ?>>Active</option>
-                                        <option value="inactive" <?php if ($status == 'inactive') echo 'selected'; ?>>Inactive</option>
+                                        <option value="Active" <?php if ($status == 'Active') echo 'selected'; ?>>Active</option>
+                                        <option value="Inactive" <?php if ($status == 'Inactive') echo 'selected'; ?>>Inactive</option>
                                     </select>
                                 </div>
                             </div>

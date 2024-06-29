@@ -9,10 +9,25 @@ $offset = ($page - 1) * $teachersPerPage;
 $sql = "SELECT teacher_id, first_name, last_name, job_description FROM teacher";
 $sql_total_teachers = "SELECT COUNT(*) AS total FROM teacher";
 
+$filters = [];
+
 if (isset($_GET['search'])) {
     $search_query = mysqli_real_escape_string($connection, $_GET['search']);
-    $sql .= " WHERE first_name LIKE '%$search_query%' OR last_name LIKE '%$search_query%' OR job_description LIKE '%$search_query%'";
-    $sql_total_teachers .= " WHERE first_name LIKE '%$search_query%' OR last_name LIKE '%$search_query%' OR job_description LIKE '%$search_query%'";
+    array_push($filters, "first_name LIKE '%$search_query%' OR last_name LIKE '%$search_query%' OR job_description LIKE '%$search_query%'");
+}
+
+if (isset($_GET['status']) && $_GET['status'] != '') {
+    $status = mysqli_real_escape_string($connection, $_GET['status']);
+    if ($status == 'Active') {
+        array_push($filters, "teacher_id IN (SELECT teacher_id FROM course)");
+    } else if ($status == 'Inactive') {
+        array_push($filters, "teacher_id NOT IN (SELECT teacher_id FROM course)");
+    }
+}
+
+if (count($filters) > 0) {
+    $sql .= " WHERE " . implode(' AND ', $filters);
+    $sql_total_teachers .= " WHERE " . implode(' AND ', $filters);
 }
 
 $sql .= " LIMIT $offset, $teachersPerPage";
@@ -82,11 +97,13 @@ include '../include/navbar.php';
                         </div>
                         <div class="col-md-6">
                             <h5><b>Availability</b></h5>
-                            <select class="form-select">
-                                <option selected="">All</option>
-                                <option value="1">Active</option>
-                                <option value="2">Inactive</option>
-                            </select>
+                            <form id="statusForm" action="teacher.php" method="GET">
+                                <select class="form-select" name="status" onchange="submit_form('statusForm')">
+                                    <option value="">All</option>
+                                    <option value="Active" <?php if (isset($_GET['status']) && $_GET['status'] == 'Active') echo 'selected'; ?>>Active</option>
+                                    <option value="Inactive" <?php if (isset($_GET['status']) && $_GET['status'] == 'Inactive') echo 'selected'; ?>>Inactive</option>
+                                </select>
+                            </form>
                         </div>
                     </div>
             </div>
@@ -100,7 +117,7 @@ include '../include/navbar.php';
                             <div class="col-sm-4">
                                 <div class="search-box">
                                     <form id="searchForm" action="teacher.php" method="GET">
-                                        <i class="fa-solid fa-magnifying-glass" onclick="submit_form()"></i>
+                                        <i class="fa-solid fa-magnifying-glass" onclick="submit_form('searchForm')"></i>
                                         <input type="text" class="form-control" name="search" id="searchInput" placeholder="Search&hellip;" value=<?php echo $_GET["search"] ?? ""; ?>>
                                     </form>
                                 </div>
