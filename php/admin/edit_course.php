@@ -1,19 +1,19 @@
-<?php
+    <?php
 include_once '../include/connect.php';
 include_once '../include/admin_checkout.php';
 
-
+// course and teacher
 if(isset($_GET['edit_course'])){
     $course_id = $_GET['edit_course'];
     $assistant = '';
 
     $sql = "SELECT course.*, teacher.* 
-            FROM course 
-            INNER JOIN teacher ON course.teacher_id=teacher.teacher_id 
-            WHERE course.course_id = ? ";
+            FROM course , teacher
+            WHERE course.teacher_id=teacher.teacher_id 
+            AND course.course_id = ? ";
 
     if ($stmt = mysqli_prepare($connection, $sql)) {
-        mysqli_stmt_bind_param($stmt, "s", $course_id);
+        mysqli_stmt_bind_param($stmt, "i", $course_id);
         if(mysqli_stmt_execute($stmt)){
             $result = mysqli_stmt_get_result($stmt);
             if (mysqli_num_rows($result) > 0)
@@ -22,6 +22,49 @@ if(isset($_GET['edit_course'])){
     } 
     mysqli_stmt_close($stmt);
 }
+
+// assistants
+$assistants = [];
+$sql = "SELECT assistant.* 
+FROM assistant, course_assistants
+WHERE assistant.assistant_id = course_assistants.assistant_id
+AND course_assistants.course_id = ?";
+if ($stmt = mysqli_prepare($connection, $sql)) {
+    mysqli_stmt_bind_param($stmt, "i", $course_id);
+    if(mysqli_stmt_execute($stmt)){
+        $result = mysqli_stmt_get_result($stmt);
+        if (mysqli_num_rows($result) > 0)
+            while($row = mysqli_fetch_array($result)){
+                $assistants[] = array(
+                    'id' => "assistant".$row['assistant_id'],
+                    'full_name' => $row['first_name'] . ' ' . $row['last_name']
+                );  
+            }
+    }
+}
+mysqli_stmt_close($stmt);
+ 
+
+// students
+$students = [];
+$sql = "SELECT student.* 
+FROM student, course_students
+WHERE student.student_id = course_students.student_id
+AND course_students.course_id = ?";
+if ($stmt = mysqli_prepare($connection, $sql)) {
+    mysqli_stmt_bind_param($stmt, "i", $course_id);
+    if(mysqli_stmt_execute($stmt)){
+        $result = mysqli_stmt_get_result($stmt);
+        if (mysqli_num_rows($result) > 0)
+            while($row = mysqli_fetch_array($result)){
+                $students[] = array(
+                    'id' => "student".$row['student_id'],
+                    'full_name' => $row['first_name'] . ' ' . $row['last_name']
+                );  
+            }
+    }
+}
+mysqli_stmt_close($stmt);
 ?>
 
 
@@ -97,30 +140,7 @@ include '../include/navbar.php';
                                 <i class="fa-solid fa-plus" id="add_assistant" onclick="add_assistant(this)"></i>
                             </div>
                         </div>
-                        <div id="selected_assistant">
-                            <?php 
-                                $sql = "SELECT assistant.* 
-                                FROM assistant
-                                INNER JOIN course_assistant ON assistant.assistant_id = course_assistant.assistant_id
-                                WHERE course_assistant.course_id = ?";
-                                if ($stmt = mysqli_prepare($connection, $sql)) {
-                                    mysqli_stmt_bind_param($stmt, "s", $course_id);
-                                    if(mysqli_stmt_execute($stmt)){
-                                        $result = mysqli_stmt_get_result($stmt);
-                                        if (mysqli_num_rows($result) > 0)
-                                            while($row = mysqli_fetch_array($result)){
-                                            ?>
-                                            <div class="added_assistant" id='<?php echo "assistant".$row['assistant_id'];?>'>
-                                                <div><?php  $row['first_name']. ' ' . $row['last_name'] ?></div>
-                                                <i class="fa-solid fa-minus"></i>
-                                            </div>
-                                            <?php
-                                            }
-                                    }
-                                }
-                                mysqli_stmt_close($stmt);
-                            ?>
-                        </div>
+                        <div id="selected_assistant"></div>
                     </div>
                 </div>             
 
@@ -150,18 +170,26 @@ include '../include/navbar.php';
                                 <i class="fa-solid fa-plus" id="add_student" onclick="add_student(this)"></i>
                             </div>
                         </div>
-
                     </div>
                 </div>             
                 <div class="add_course">
-                    <button name="add_course" onclick="save_to_databse()">Add Course</button>
+                    <button name="updata_course" onclick="update_databse()">Update Course</button>
                 </div>
             </form>
         </div>
     </div>
 
+    <script id="assistants-data">
+        <?php echo json_encode($assistants); ?>
+    </script> 
+
+    <script id="students-data">
+        <?php echo json_encode($students); ?>
+    </script> 
+    
     <script src="../../external/bootstrap/bootstrap.min.js"></script>
-    <script src="../../js/add_course.js"></script>
+    <!-- <script src="../../js/add_course.js"></script> -->
+    <script src="../../js/edit_course.js"></script>
     <script src="../../external/jquery/jquery-3.7.1.min.js"></script>
     <script src="../../js/live_search.js"></script>
     </body>

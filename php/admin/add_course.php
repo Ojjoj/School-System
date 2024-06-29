@@ -1,20 +1,6 @@
 <?php
 include_once '../include/admin_checkout.php'; 
 include_once '../include/connect.php';
-
-// if(isset($_POST['add_course'])){
-//     if(isset($_POST["assistants"]) && isset($_POST["students"])){
-//         $assistants = $_POST["assistants"];
-//         $students = $_POST["students"];
-//         foreach ($assistants as $assistant) {
-//             echo "Assistant ID: " . $assistant[0] . ", Assistant Name: " . $assistant[1] . "<br>";
-//         }
-//     }
-// }
-
-
-
-
 ?>
 
 <!DOCTYPE html>
@@ -41,6 +27,17 @@ include '../include/navbar.php';
             <?php include '../include/sidebar.php'; ?>
         </div>
         <div class="col-md-10" style="margin: 30px 0 10px 0;">
+
+        <div id='success' class="alert alert-success alert-dismissible fade show" style="display: none;" role="alert" style="width:99%;">
+            New course added successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div id='fail' class="alert alert-danger alert-dismissible fade show" style="display: none;" role="alert" style="width:99%;">
+            Failed to add new course. Please try again.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
             <form action="" method="POST" enctype="multipart/form-data">
                 <h2>Course Information</h2>
                 <hr>
@@ -61,7 +58,7 @@ include '../include/navbar.php';
                     </div>
                     <div class="col-md-6 col-sm-12 image_div" >
                         <div class="card" style="height: 200px; width:300px;">
-                            <img src="../../media/course_image/flower1.jpg" id="course_image">
+                            <img src="../../media/course_image/default_course_image.jpg" id="course_image">
                         </div>
                         <label for="image_file">Upload</label>
                         <input type="file" name="image" id="image_file" class="image_file" onchange="change_image()">
@@ -131,6 +128,7 @@ include '../include/navbar.php';
 
     <script src="../../external/bootstrap/bootstrap.min.js"></script>
     <script src="../../js/add_course.js"></script>
+    <script src="../../js/add_edit_course.js"></script>
     <script src="../../external/jquery/jquery-3.7.1.min.js"></script>
     <script src="../../js/live_search.js"></script>
     </body>

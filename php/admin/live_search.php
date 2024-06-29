@@ -20,11 +20,17 @@ if(isset($_POST['teacher_name'])){
 
         if(mysqli_num_rows($result) > 0){
             while($row = mysqli_fetch_assoc($result)){
-                array_push($data, $row['first_name'].' '.$row['last_name']);
+                $data[] = array(
+                    'id' => $row['teacher_id'],
+                    'full_name' => $row['first_name'] . ' ' . $row['last_name']
+                );            
             }
         } 
         else {
-            array_push($data, 'no result found');
+            $data[] = array(
+                'id' => ' ',
+                'full_name' => 'no result found'
+            );         
         }
         mysqli_stmt_close($stmt);
 
