@@ -88,7 +88,7 @@ if(!empty($_POST['assistants'])){
 
 if(!empty($_POST['students'])){
   $course_id = $_POST['course_id'];
-  $assistants = json_decode($_POST['students'], true);
+  $students = json_decode($_POST['students'], true);
 
   if (is_array($students)) {
     foreach ($students as $student) {
@@ -101,7 +101,7 @@ if(!empty($_POST['students'])){
         }
         mysqli_stmt_close($stmt);
     }
-    echo "Assistants saved successfully";
+    echo "students saved successfully";
   } 
   else {
     echo "Invalid data format";

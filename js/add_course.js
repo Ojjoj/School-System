@@ -1,3 +1,16 @@
+// // the chosen assistants in edit_course
+// let chosen_assistants = document.getElementById('assistants-data').textContent;
+// let saved_assistants = JSON.parse(chosen_assistants);
+
+// // Convert array of objects to a Map
+// let assistantsMap = new Map();
+// saved_assistants.forEach(assistant => {
+//     assistantsMap.set(assistant.id, assistant.full_name);
+// });
+
+// console.log(assistantsMap);
+
+// let assistant_list = assistantsMap.size > 0 ? assistantsMap : new Map();
 let assistant_list = new Map();
 let student_list = new Map();
 let assistant_name;
@@ -18,7 +31,6 @@ function chosen_assistant(p){
 }
 
 function add_assistant(){
-    console.log(assistant_list);
     assistant_name_value = document.getElementById('select_assistant').value; 
 
     if(assistant_name_value === assistant_name){
