@@ -17,11 +17,21 @@ $offset = ($page - 1) * $studentsPerPage;
 
 $sql = "SELECT student_id, real_id, first_name, last_name, date_of_birth, gender, country FROM student";
 $sql_total_students = "SELECT COUNT(*) AS total FROM student";
+$filters = [];
 
 if (isset($_GET['search'])) {
     $search_query = mysqli_real_escape_string($connection, $_GET['search']);
-    $sql .= " WHERE real_id LIKE '%$search_query%' OR first_name LIKE '%$search_query%' OR last_name LIKE '%$search_query%' OR country LIKE '%$search_query%'";
-    $sql_total_students .= " WHERE first_name LIKE '%$search_query%' OR last_name LIKE '%$search_query%' OR country LIKE '%$search_query%'";
+    array_push($filters, "real_id LIKE '%$search_query%' OR first_name LIKE '%$search_query%' OR last_name LIKE '%$search_query%' OR country LIKE '%$search_query%'");
+}
+
+if (isset($_GET['status']) && $_GET['status'] != '') {
+    $status = mysqli_real_escape_string($connection, $_GET['status']);
+    array_push($filters, "status = '$status'");
+}
+
+if (count($filters) > 0) {
+    $sql .= " WHERE " . implode(' AND ', $filters);
+    $sql_total_students .= " WHERE " . implode(' AND ', $filters);
 }
 
 $sql .= " LIMIT $offset, $studentsPerPage";
@@ -89,11 +99,13 @@ include '../include/navbar.php';
                         </div>
                         <div class="col-md-6">
                             <h5><b>Availability</b></h5>
-                            <select class="form-select">
-                                <option selected="">All</option>
-                                <option value="1">Active</option>
-                                <option value="2">Inactive</option>
-                            </select>
+                            <form id="statusForm" action="student.php" method="GET">
+                                <select class="form-select" name="status" onchange="submit_form('statusForm')">
+                                    <option value="">All</option>
+                                    <option value="Active" <?php if (isset($_GET['status']) && $_GET['status'] == 'Active') echo 'selected'; ?>>Active</option>
+                                    <option value="Inactive" <?php if (isset($_GET['status']) && $_GET['status'] == 'Inactive') echo 'selected'; ?>>Inactive</option>
+                                </select>
+                            </form>
                         </div>
                     </div>
             </div>
@@ -107,7 +119,7 @@ include '../include/navbar.php';
                             <div class="col-sm-4">
                                 <div class="search-box">
                                     <form id="searchForm" action="student.php" method="GET">
-                                        <i class="fa-solid fa-magnifying-glass" onclick="submit_form()"></i>
+                                        <i class="fa-solid fa-magnifying-glass" onclick="submit_form('searchForm')"></i>
                                         <input type="text" class="form-control" name="search" id="searchInput" placeholder="Search&hellip;" value=<?php echo $_GET["search"] ?? ""; ?>>
                                     </form>
                                 </div>
@@ -118,11 +130,11 @@ include '../include/navbar.php';
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>First Name <i class="fa fa-sort"></i></th>
+                                <th>First Name <i class="fa fa-sort" onclick="sort()"></i></th>
                                 <th>Last Name</th>
-                                <th>Age <i class="fa fa-sort"></i></th>
+                                <th>Age <i class="fa fa-sort" onclick="sort()"></i></th>
                                 <th>Gender</th>
-                                <th>Country <i class="fa fa-sort"></i></th>
+                                <th>Country <i class="fa fa-sort" onclick="sort()"></i></th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -139,7 +151,7 @@ include '../include/navbar.php';
                                         <a href="view_student.php?view=<?php echo $row['student_id']; ?>" class="view" title="View" name="view" data-toggle="tooltip">
                                             <i class="fa-solid fa-eye"></i>
                                         </a>
-                                        <a href="edit_student.php?edit=<?php echo $row['student_id'];?>" class="edit" title="Edit" name="edit" data-toggle="tooltip">
+                                        <a href="edit_student.php?edit=<?php echo $row['student_id']; ?>" class="edit" title="Edit" name="edit" data-toggle="tooltip">
                                             <i class="fa-solid fa-pencil"></i>
                                         </a>
                                         <a href="student.php?delete=<?php echo $row['student_id']; ?>" class="delete" title="Delete" name="delete" data-toggle="tooltip" onclick="return confirm('Delete this student?');">

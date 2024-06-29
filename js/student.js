@@ -1,4 +1,5 @@
-function submit_form() {
-    document.getElementById("searchForm").submit();
+function submit_form(id) {
+    document.getElementById(id).submit();
 }
+
 

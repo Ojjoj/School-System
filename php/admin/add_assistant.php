@@ -45,12 +45,26 @@ if (isset($_GET['delete'])) {
 
 $sql = "SELECT assistant_id, first_name, last_name, email FROM assistant";
 
+$filters = [];
 
 if (isset($_GET['search'])) {
     $search_query = mysqli_real_escape_string($connection, $_GET['search']);
-    $sql .= " WHERE first_name LIKE '%$search_query%' OR last_name LIKE '%$search_query%' OR email LIKE '%$search_query%'";
-    // $sql_total_students .= " WHERE first_name LIKE '%$search_query%' OR last_name LIKE '%$search_query%' OR country LIKE '%$search_query%'";
+    array_push($filters, "first_name LIKE '%$search_query%' OR last_name LIKE '%$search_query%' OR email LIKE '%$search_query%'");
 }
+
+if (isset($_GET['status']) && $_GET['status'] != '') {
+    $status = mysqli_real_escape_string($connection, $_GET['status']);
+    if ($status == 'Active') {
+        array_push($filters, "assistant_id IN (SELECT assistant_id FROM course_assistants)");
+    } else if ($status == 'Inactive') {
+        array_push($filters, "assistant_id NOT IN (SELECT assistant_id FROM course_assistants)");
+    }
+}
+
+if (count($filters) > 0) {
+    $sql .= " WHERE " . implode(' AND ', $filters);
+}
+
 
 if ($stmt = mysqli_prepare($connection, $sql)) {
     mysqli_stmt_execute($stmt);
@@ -98,11 +112,13 @@ include '../include/navbar.php';
                             </div>
                             <div class="col-md-6">
                                 <h5><b>Availability</b></h5>
-                                <select class="form-select">
-                                    <option selected="">All</option>
-                                    <option value="1">Active</option>
-                                    <option value="2">Inactive</option>
-                                </select>
+                                <form id="statusForm" action="add_assistant.php" method="GET">
+                                    <select class="form-select" name='status' onchange="submit_form('statusForm')">
+                                        <option value="">All</option>
+                                        <option value="Active"<?php if (isset($_GET['status']) && $_GET['status'] == 'Active') echo 'selected'?>>Active</option>
+                                        <option value="Inactive"<?php if (isset($_GET['status']) && $_GET['status'] == 'Inactive') echo 'selected'?>>Inactive</option>
+                                    </select>
+                                </form>
                             </div>
                         </div>
                         <br>
@@ -116,8 +132,8 @@ include '../include/navbar.php';
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="search-box">
-                                                <form id="searchForm" action="assistant.php" method="GET">
-                                                    <i class="fa-solid fa-magnifying-glass" onclick="submit_form()"></i>
+                                                <form id="searchForm" action="add_assistant.php" method="GET">
+                                                    <i class="fa-solid fa-magnifying-glass" onclick="submit_form('searchForm')"></i>
                                                     <input type="text" class="form-control" name="search" id="searchInput" placeholder="Search&hellip;" value=<?php echo $_GET["search"] ?? ""; ?>>
                                                 </form>
                                             </div>
