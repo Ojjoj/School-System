@@ -32,8 +32,8 @@ if(isset($_GET['view_course'])){
 
     $sql = "SELECT assistant.* 
             FROM assistant
-            INNER JOIN course_assistant ON assistant.assistant_id = course_assistant.assistant_id
-            WHERE course_assistant.course_id = ?";
+            INNER JOIN course_assistants ON assistant.assistant_id = course_assistants.assistant_id
+            WHERE course_assistants.course_id = ?";
     if ($stmt = mysqli_prepare($connection, $sql)) {
         mysqli_stmt_bind_param($stmt, "s", $course_id);
         if(mysqli_stmt_execute($stmt)){
@@ -129,11 +129,11 @@ include '../include/navbar.php';
                             if(isset($_GET['view_course'])){
                                 $sql = "SELECT student.* 
                                         FROM student
-                                        INNER JOIN student_course ON student.student_id = student_course.student_id
-                                        WHERE student_course.course_id = ?";
+                                        INNER JOIN course_students ON student.student_id = course_students.student_id
+                                        WHERE course_students.course_id = ?";
 
                                 if ($stmt = mysqli_prepare($connection, $sql)) {
-                                    mysqli_stmt_bind_param($stmt, "s", $course_id);
+                                    mysqli_stmt_bind_param($stmt, "i", $course_id);
                                     if(mysqli_stmt_execute($stmt)){
                                         $result = mysqli_stmt_get_result($stmt);
                                         if (mysqli_num_rows($result) > 0)

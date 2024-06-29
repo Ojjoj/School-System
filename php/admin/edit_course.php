@@ -1,4 +1,4 @@
-<?php
+    <?php
 include_once '../include/connect.php';
 include_once '../include/admin_checkout.php';
 
@@ -13,7 +13,7 @@ if(isset($_GET['edit_course'])){
             WHERE course.course_id = ? ";
 
     if ($stmt = mysqli_prepare($connection, $sql)) {
-        mysqli_stmt_bind_param($stmt, "s", $course_id);
+        mysqli_stmt_bind_param($stmt, "i", $course_id);
         if(mysqli_stmt_execute($stmt)){
             $result = mysqli_stmt_get_result($stmt);
             if (mysqli_num_rows($result) > 0)
@@ -101,8 +101,8 @@ include '../include/navbar.php';
                             <?php 
                                 $sql = "SELECT assistant.* 
                                 FROM assistant
-                                INNER JOIN course_assistant ON assistant.assistant_id = course_assistant.assistant_id
-                                WHERE course_assistant.course_id = ?";
+                                INNER JOIN course_assistants ON assistant.assistant_id = course_assistants.assistant_id
+                                WHERE course_assistants.course_id = ?";
                                 if ($stmt = mysqli_prepare($connection, $sql)) {
                                     mysqli_stmt_bind_param($stmt, "s", $course_id);
                                     if(mysqli_stmt_execute($stmt)){
