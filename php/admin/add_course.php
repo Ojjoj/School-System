@@ -128,7 +128,6 @@ include '../include/navbar.php';
 
     <script src="../../external/bootstrap/bootstrap.min.js"></script>
     <script src="../../js/add_course.js"></script>
-    <script src="../../js/add_edit_course.js"></script>
     <script src="../../external/jquery/jquery-3.7.1.min.js"></script>
     <script src="../../js/live_search.js"></script>
     </body>

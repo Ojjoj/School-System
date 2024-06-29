@@ -1,13 +1,17 @@
+let course_id = document.getElementById("course_id").textContent;
+
 let assistant_name;
 let assistant_id;
 let assistant_name_value;
 
 let student_name;
 let student_id;
+// console.log(document.getElementById("course_image").src.substring(50));
 
 function change_image(){
     let course_image = document.getElementById("course_image");
     course_image.src = URL.createObjectURL(image_file.files[0]);
+    
 }
 
 // the chosen assistants in edit_course
@@ -175,3 +179,122 @@ function add_student_html(){
 }
 
 add_student_html();
+
+
+function update_database(event){
+    event.preventDefault();
+
+    let image_source = document.getElementById("course_image").src.substring(31);
+    console.log(image_source);
+
+    //step 1
+    let formData = new FormData();
+    let image_file = document.getElementById('image_file').files[0];
+    formData.append('image', image_file);
+
+    //step2
+    let course_name = document.getElementById('course_name').value;
+    let start_date = document.getElementById('start_date').value;
+    let end_date = document.getElementById('end_date').value;
+
+    //step3
+    let teacher_name = document.getElementById('select_teacher').value;
+    let teacher_classes = document.getElementById('select_teacher').classList;
+    let teacher_id;
+    if (teacher_classes.length == 2 && teacher_name != ""){
+        teacher_id = teacher_classes[1].substring(7);
+    } 
+    console.log(teacher_id);
+    
+    //step4
+    let assistant_map = new Map();
+    assistant_list.forEach((value,key)=>{
+        let number_key = key.replace('assistant','');
+        assistant_map.set(number_key, value);
+    });
+    let assistat_array = Array.from(assistant_map.entries())
+
+    //step5
+    let student_map = new Map();
+    student_list.forEach((value,key)=>{
+        let number_key = key.replace('student','');
+        student_map.set(number_key, value);
+    });
+    let student_array = Array.from(student_map.entries())
+
+    $.ajax({
+        type: "POST",
+        url: "update_course.php",
+        dataType: 'html',
+        processData: false, 
+        contentType: false,
+        data: formData,
+        success: function(response) {
+            console.log("Image moved successfully:", response);
+            image_path = response;
+            $.ajax({
+                type: "POST",
+                url: "update_course.php",
+                dataType: 'html',
+                data: {
+                    course_id: course_id,
+                    course_name: course_name,
+                    start_date: start_date,
+                    end_date: end_date,
+                    image_path: image_path,
+                    teacher_id: teacher_id,
+                    image_source: image_source,
+                },
+                success: function(response) {
+                    console.log("Data saved successfully:", response);
+                    if(response == "true"){
+                        $.ajax({
+                            type: "POST",
+                            url: "update_course.php",
+                            dataType: 'html',
+                            data: {
+                                course_id: course_id,
+                                assistants: JSON.stringify(assistat_array)
+                            },
+                            success: function(response) {
+                                console.log("Data saved successfully:", response);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error("Error saving data:", error);
+                            }
+                        });
+
+                        $.ajax({
+                            type: "POST",
+                            url: "update_course.php",
+                            dataType: 'html',
+                            data: {
+                                course_id: course_id,
+                                students: JSON.stringify(student_array)
+                            },
+                            success: function(response) {
+                                console.log("Data saved successfully:", response);
+                            },
+                            error: function(xhr, status, error) {
+                                console.error("Error saving data:", error);
+                            }
+                        });
+                        let success = document.getElementById('success');
+                        success.style.display = 'block';
+                    }
+                    else{
+                        let fail = document.getElementById('fail');
+                        fail.style.display = 'block';
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error saving data:", error);
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error("Error saving data:", error);
+        }
+
+    });   
+}

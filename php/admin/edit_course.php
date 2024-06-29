@@ -92,6 +92,16 @@ include '../include/navbar.php';
             <?php include '../include/sidebar.php'; ?>
         </div>
         <div class="col-md-10" style="margin: 30px 0 10px 0;">
+        <div id='success' class="alert alert-success alert-dismissible fade show" style="display: none;" role="alert" style="width:99%;">
+            course updated successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div id='fail' class="alert alert-danger alert-dismissible fade show" style="display: none;" role="alert" style="width:99%;">
+            Failed to update the course. Please try again.
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
             <form action="" method="POST" enctype="multipart/form-data">
                 <h2>Course Information</h2>
                 <hr>
@@ -125,7 +135,7 @@ include '../include/navbar.php';
                     <div class="col-md-6 col-sm-12">
                         <label class="form-label" for="select_teacher">Choose Teacher</label>
                         <div class="teacher">
-                            <input type="text" class="form-control" id="select_teacher" name="select_teacher" value='<?php echo $data['first_name'].' '.$data['last_name'] ; ?>' placeholder="select a teacher">
+                            <input type="text" class="form-control <?php echo "teacher".$data['teacher_id']?>" id="select_teacher" name="select_teacher" value='<?php echo $data['first_name'].' '.$data['last_name'] ; ?>' placeholder="select a teacher">
                             <div class="select" id="select_teacher_options"></div>
                         </div>
                     </div>
@@ -173,11 +183,15 @@ include '../include/navbar.php';
                     </div>
                 </div>             
                 <div class="add_course">
-                    <button name="updata_course" onclick="update_databse()">Update Course</button>
+                    <button name="updata_course" onclick="update_database(event)">Update Course</button>
                 </div>
             </form>
         </div>
     </div>
+
+    <script id="course_id">
+        <?php echo $_GET['edit_course']; ?>
+    </script> 
 
     <script id="assistants-data">
         <?php echo json_encode($assistants); ?>
@@ -188,7 +202,6 @@ include '../include/navbar.php';
     </script> 
     
     <script src="../../external/bootstrap/bootstrap.min.js"></script>
-    <!-- <script src="../../js/add_course.js"></script> -->
     <script src="../../js/edit_course.js"></script>
     <script src="../../external/jquery/jquery-3.7.1.min.js"></script>
     <script src="../../js/live_search.js"></script>
