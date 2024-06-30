@@ -1,3 +1,4 @@
+
 function checkInputs(){
     let username_value = document.getElementById('username').value;
     let password_value = document.getElementById('password').value;

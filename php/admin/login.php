@@ -1,4 +1,8 @@
 <?php
+session_start();
+session_unset(); // Unset all session variables
+session_destroy();
+
 if (isset($_POST['submit'])) {
   include_once '../include/connect.php';
 
@@ -80,7 +84,6 @@ if (isset($_POST['submit'])) {
 
     </form>
   </div>
-
   <script src="../../js/login.js"></script>
 </body>
 
