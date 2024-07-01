@@ -240,3 +240,4 @@ if (isset($_GET['delete'])) {
     <script src="../../external/bootstrap/bootstrap.min.js"></script>
     <script src="../../js/profile.js"></script>
 </body>
+</html>

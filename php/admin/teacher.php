@@ -30,6 +30,34 @@ if (count($filters) > 0) {
     $sql_total_teachers .= " WHERE " . implode(' AND ', $filters);
 }
 
+$sorts = [];
+if (isset($_SESSION['sortFN'])) {
+    $_SESSION['sortFN'] = ($_SESSION['sortFN'] == 'ASC') ? 'DESC' : 'ASC';
+} else {
+    $_SESSION['sortFN'] = 'ASC';
+}
+if (isset($_SESSION['sortLN'])) {
+    $_SESSION['sortLN'] = ($_SESSION['sortLN'] == 'ASC') ? 'DESC' : 'ASC';
+} else {
+    $_SESSION['sortLN'] = 'ASC';
+}
+
+if (isset($_GET['sortFN']) && $_GET['sortFN'] != '') {
+    $sort = mysqli_real_escape_string($connection, $_GET['sortFN']);
+    $sortOrder = $_SESSION['sortFN'];
+    array_push($sorts, "$sort $sortOrder");
+}
+
+if (isset($_GET['sortLN']) && $_GET['sortLN'] != '') {
+    $sort = mysqli_real_escape_string($connection, $_GET['sortLN']);
+    $sortOrder = $_SESSION['sortLN'];
+    array_push($sorts, "$sort $sortOrder");
+}
+if (count($sorts) > 0) {
+    $sql .= " ORDER BY " . implode(' , ', $sorts);
+    $sql_total_teachers .= " ORDER BY " . implode(' , ', $sorts);
+}
+
 $sql .= " LIMIT $offset, $teachersPerPage";
 
 if ($stmt = mysqli_prepare($connection, $sql)) {
@@ -128,8 +156,14 @@ include '../include/navbar.php';
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>First Name <i class="fa fa-sort"></i></th>
-                                <th>Last Name <i class="fa fa-sort"></i></th>
+                                <form id="sortFormFN" action="teacher.php" method="GET">
+                                    <th>First Name <i class="fa fa-sort" onclick="submit_form('sortFormFN')"></i></th>
+                                    <input type="hidden" id="sortInput" name="sortFN" value="first_name">
+                                </form>
+                                <form id="sortFormLN" action="teacher.php" method="GET">
+                                    <th>Last Name <i class="fa fa-sort" onclick="submit_form('sortFormLN')"></i></th>
+                                    <input type="hidden" id="sortInput" name="sortLN" value="last_name">
+                                </form>
                                 <th>Job Description</th>
                                 <th>Actions</th>
                             </tr>

@@ -10,7 +10,7 @@ function calculate_age($dateOfBirth)
     return $age->y;
 }
 
-$studentsPerPage = 10;
+$studentsPerPage = 3;
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 $offset = ($page - 1) * $studentsPerPage;
 
@@ -34,6 +34,45 @@ if (count($filters) > 0) {
     $sql_total_students .= " WHERE " . implode(' AND ', $filters);
 }
 
+$sorts = [];
+if (isset($_SESSION['sortFN'])) {
+    $_SESSION['sortFN'] = ($_SESSION['sortFN'] == 'ASC') ? 'DESC' : 'ASC';
+} else {
+    $_SESSION['sortFN'] = 'ASC';
+}
+if (isset($_SESSION['sortA'])) {
+    $_SESSION['sortA'] = ($_SESSION['sortA'] == 'ASC') ? 'DESC' : 'ASC';
+} else {
+    $_SESSION['sortA'] = 'ASC';
+}
+if (isset($_SESSION['sortC'])) {
+    $_SESSION['sortC'] = ($_SESSION['sortC'] == 'ASC') ? 'DESC' : 'ASC';
+} else {
+    $_SESSION['sortC'] = 'ASC';
+}
+
+if (isset($_GET['sortFN']) && $_GET['sortFN'] != '') {
+    $sort = mysqli_real_escape_string($connection, $_GET['sortFN']);
+    $sortOrder = $_SESSION['sortFN'];
+    array_push($sorts, "$sort $sortOrder");
+}
+
+if (isset($_GET['sortA']) && $_GET['sortA'] != '') {
+    $sort = mysqli_real_escape_string($connection, $_GET['sortA']);
+    $sortOrder = $_SESSION['sortA'];
+    array_push($sorts, "$sort $sortOrder");
+}
+
+if (isset($_GET['sortC']) && $_GET['sortC'] != '') {
+    $sort = mysqli_real_escape_string($connection, $_GET['sortC']);
+    $sortOrder = $_SESSION['sortC'];
+    array_push($sorts, "$sort $sortOrder");
+}
+
+if (count($sorts) > 0) {
+    $sql .= " ORDER BY " . implode(' , ', $sorts);
+    $sql_total_students .= " ORDER BY " . implode(' , ', $sorts);
+}
 $sql .= " LIMIT $offset, $studentsPerPage";
 
 if ($stmt = mysqli_prepare($connection, $sql)) {
@@ -130,11 +169,20 @@ include '../include/navbar.php';
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>First Name <i class="fa fa-sort" onclick="sort()"></i></th>
+                                <form id="sortFormFN" action="student.php" method="GET">
+                                    <th>First Name <i class="fa fa-sort" onclick="submit_form('sortFormFN')"></i></th>
+                                    <input type="hidden" name="sortFN" value="first_name">
+                                </form>
                                 <th>Last Name</th>
-                                <th>Age <i class="fa fa-sort" onclick="sort()"></i></th>
+                                <form id="sortFormA" action="student.php" method="GET">
+                                    <th>Age <i class="fa fa-sort" onclick="submit_form('sortFormA')"></i></th>
+                                    <input type="hidden" name="sortA" value="date_of_birth">
+                                </form>
                                 <th>Gender</th>
-                                <th>Country <i class="fa fa-sort" onclick="sort()"></i></th>
+                                <form id="sortFormC" action="student.php" method="GET">
+                                    <th>Country <i class="fa fa-sort" onclick="submit_form('sortFormC')"></i></th>
+                                    <input type="hidden" name="sortC" value="country">
+                                </form>
                                 <th>Actions</th>
                             </tr>
                         </thead>

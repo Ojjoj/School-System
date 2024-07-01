@@ -47,7 +47,7 @@ if (isset($_GET["edit"])) {
     }
 
     // $sql_teacher_assistant = "SELECT t.teacher_id, t.first_name, t.last_name FROM teacher t INNER JOIN teacher_assistant ta ON t.teacher_id = ta.teacher_id WHERE ta.assistant_id = ?";
-    $sql_teacher_assistant = "SELECT t.teacher_id, t.first_name, t.last_name FROM assistant a, course_assistant ca, course c, teacher t WHERE t.teacher_id = c.teacher_id AND c.course_id = ca.course_id AND ca.assistant_id = a.assistant_id AND a.assistant_id = ?";
+    $sql_teacher_assistant = "SELECT t.teacher_id, t.first_name, t.last_name FROM assistant a, course_assistants ca, course c, teacher t WHERE t.teacher_id = c.teacher_id AND c.course_id = ca.course_id AND ca.assistant_id = a.assistant_id AND a.assistant_id = ?";
     $stmt_teacher_assistant = mysqli_prepare($connection, $sql_teacher_assistant);
     if ($stmt_teacher_assistant) {
         mysqli_stmt_bind_param($stmt_teacher_assistant, 'i', $assistant_id);
@@ -175,7 +175,7 @@ include '../include/navbar.php';
                                                     FROM teacher    
                                                     WHERE teacher_id NOT IN (
                                                         SELECT t.teacher_id 
-                                                        FROM assistant a, course_assistant ca, course c, teacher t 
+                                                        FROM assistant a, course_assistants ca, course c, teacher t 
                                                         WHERE t.teacher_id = c.teacher_id 
                                                             AND c.course_id = ca.course_id 
                                                             AND ca.assistant_id = a.assistant_id 

@@ -1,60 +1,57 @@
   <?php
-include_once '../include/admin_checkout.php'; 
+  include_once '../include/admin_checkout.php';
 
-if(isset($_POST['add'])){
+  if (isset($_POST['add'])) {
     include_once '../include/connect.php';
 
     $first_name = $_POST['first_name'];
-    $last_name  = $_POST['last_name'];  
+    $last_name  = $_POST['last_name'];
     $username   = strtolower($_POST['username']);
     $password   = $_POST['password'];
-      
+
 
     $result = false;
     $sql = "SELECT * FROM admins WHERE username=?;";
     $stmt = mysqli_stmt_init($connection);
-    if(mysqli_stmt_prepare($stmt,$sql)){
-        mysqli_stmt_bind_param($stmt,"s",$username);
-        mysqli_stmt_execute($stmt);
-        $result_data = mysqli_stmt_get_result($stmt);
-        if(mysqli_fetch_assoc($result_data)){
-            $result=true;
-            header("location:add_admin.php?error=alreadyexist");
-        }
-        else{
-            $result=false; 
-        }   
-    }
-    else{
-        header("location:add_admin.php?error=stmtfailed");
-        exit();
+    if (mysqli_stmt_prepare($stmt, $sql)) {
+      mysqli_stmt_bind_param($stmt, "s", $username);
+      mysqli_stmt_execute($stmt);
+      $result_data = mysqli_stmt_get_result($stmt);
+      if (mysqli_fetch_assoc($result_data)) {
+        $result = true;
+        header("location:add_admin.php?error=alreadyexist");
+      } else {
+        $result = false;
+      }
+    } else {
+      header("location:add_admin.php?error=stmtfailed");
+      exit();
     }
     mysqli_stmt_close($stmt);
 
-    if(!$result){
+    if (!$result) {
       $sql = "INSERT INTO admins (first_name, last_name, username, passwrd) VALUES (?,?,?,?);";
       $stmt = mysqli_stmt_init($connection);
-      if(mysqli_stmt_prepare($stmt,$sql)){
+      if (mysqli_stmt_prepare($stmt, $sql)) {
         $hashed_password = password_hash($password, PASSWORD_ARGON2ID);
-        mysqli_stmt_bind_param($stmt,"ssss",$first_name, $last_name, $username, $hashed_password);
+        mysqli_stmt_bind_param($stmt, "ssss", $first_name, $last_name, $username, $hashed_password);
         mysqli_stmt_execute($stmt);
-      }
-          
-      else{
+      } else {
         header("location:add_admin.php?error=stmtfailed");
         exit();
       }
-  
-      
+
+
       mysqli_stmt_close($stmt);
       header("location:main_admin_profile.php?error=none");
       exit();
     }
-}
+  }
 
-?>
-<!DOCTYPE html>
-<head lang="en">
+  ?>
+  <!DOCTYPE html>
+
+  <head lang="en">
     <title>Add Admin</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -63,13 +60,14 @@ if(isset($_POST['add'])){
     <link rel="stylesheet" href="../../external/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="../../external/fontawesome/css/fontawesome.min.css">
     <link rel="stylesheet" href="../../css/login.css">
-</head>
-<body>
+  </head>
+
+  <body>
     <div class="container">
       <form action="" method="post" onsubmit="return checkInputs()">
 
         <div>
-          <h2>Add Admin</h2 >
+          <h2>Add Admin</h2>
           <hr>
         </div>
 
@@ -90,13 +88,13 @@ if(isset($_POST['add'])){
           <input type="text" class="form-control" name="username" id="username">
           <span id="username_error"></span>
           <span>
-            <?php 
-            if(isset($_GET['error'])){
-              if($_GET['error']=='alreadyexist'){
+            <?php
+            if (isset($_GET['error'])) {
+              if ($_GET['error'] == 'alreadyexist') {
                 echo "a username already exists";
               }
             } ?>
-            </span>
+          </span>
         </div>
 
         <div class="mb-3">
@@ -115,4 +113,6 @@ if(isset($_POST['add'])){
     </div>
 
     <script src="../../js/add_admin.js"></script>
-</body>
+  </body>
+
+  </html>
