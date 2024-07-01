@@ -123,3 +123,26 @@ table i{
     background-color:#3b3b3d;
     cursor: pointer;
 }
+
+
+#align_button{
+    margin-top: 20px;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    flex-direction: row;
+}
+
+#align_button button{
+    width: 10%;
+}
+
+.cancel{
+    color: #fff;
+    text-decoration: none;
+}
+
+.space{
+    margin-bottom: 0;
+    margin-right: 30px;
+}   

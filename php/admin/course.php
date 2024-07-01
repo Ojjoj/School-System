@@ -130,8 +130,8 @@ include '../include/navbar.php';
                     <div class="modal-footer">
                         <div class="text-end">
                             <form method="post">
-                                <button type="button" class="btn btn-danger btn-sm rounded-0" data-bs-dismiss="modal" id="delete">Delete</button>
-                                <button type="button" class="btn btn-secondary btn-sm rounded-0" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary btn-sm rounded-0" data-bs-dismiss="modal" id="delete">Delete</button>
+                                <button type="button" class="btn btn-danger btn-sm rounded-0" data-bs-dismiss="modal">Cancel</button>
                             </form>
                         </div>
                     </div>

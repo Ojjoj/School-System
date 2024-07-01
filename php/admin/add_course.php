@@ -119,9 +119,11 @@ include '../include/navbar.php';
 
                     </div>
                 </div>             
-                <div class="add_course">
-                    <button name="add_course" onclick="save_to_database(event)">Add Course</button>
-                </div>
+                
+            <div id="align_button">
+              <button type="submit" class="space btn btn-primary" name="add_course" onclick="save_to_database(event)">Add</button>
+              <button class="btn btn-danger" name="cancel"><a href="course.php" class="cancel">Cancel</a></button>
+            </div>
             </form>
         </div>
     </div>
