@@ -126,3 +126,6 @@ table i{
 ::-webkit-scrollbar {
     width: 0;  
 }
+.delete {
+    color: #E34724;
+}
