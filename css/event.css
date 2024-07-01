@@ -60,3 +60,6 @@ body{
 .center{
     text-align: center;
 }
+::-webkit-scrollbar {
+    width: 0;  
+}

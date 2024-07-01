@@ -42,3 +42,7 @@ body {
 .course h3{
     margin:40px 0 20px 0;
 }
+
+::-webkit-scrollbar {
+    width: 0;  
+}

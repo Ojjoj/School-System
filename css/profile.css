@@ -105,5 +105,8 @@
     color:#555;
 }
 
+::-webkit-scrollbar {
+    width: 0;  
+}
 
 
