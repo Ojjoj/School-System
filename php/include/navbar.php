@@ -51,6 +51,18 @@
       .nav-link {
         border-radius: 10px;
       }
+      .logo{
+        width: 76px;
+        margin-left: -69px;
+        margin-top: -10px;
+      }
+      .h1{
+        font-size: 39px;
+        margin-left: 19px;
+        margin-top: 0;
+        margin-bottom: 0;
+        font-family: cursive;
+      }
     </style>
     <!-- Custom styles for this template -->
   </head>
@@ -60,9 +72,11 @@
       <div class="px-3 py-2 text-bg-dark fixed-top">
         <div class="container">
           <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-            <a href="/" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
+            <div class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
               <!-- logo -->
-            </a>
+               <img src="../../media/images/output-onlinepngtools.png" class="logo">
+               <h1 class="h1">HORIZON</h1>
+            </div>
 
             <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0">
               <li>

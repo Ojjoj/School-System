@@ -125,6 +125,7 @@ include '../include/navbar.php';
             </form>
         </div>
     </div>
+    <img src="../../media/images/logo.ico" style="color:green;">
 
     <script src="../../external/bootstrap/bootstrap.min.js"></script>
     <script src="../../js/add_course.js"></script>

@@ -41,12 +41,12 @@ if(isset($_FILES['image'])){
 
 
 
-if(!empty($_POST['course_name']) && !empty($_POST['start_date']) && !empty($_POST['end_date'])){
+if(!empty($_POST['course_name']) && !empty($_POST['start_date']) && !empty($_POST['end_date']) && !empty($_POST['teacher_id'])){
     $course_id = $_POST['course_id'];
     $course_name = $_POST['course_name'];
     $start_date = $_POST['start_date'];
     $end_date = $_POST['end_date'];
-    $teacher_id = !empty($_POST['teacher_id']) ? $_POST['teacher_id'] : NULL;
+    $teacher_id = $_POST['teacher_id'];
     $image_path = !empty($_POST['image_path']) ? $_POST['image_path'] : '../../'.$_POST['image_source'];
 
     $sql = "UPDATE course SET course_name = ?, teacher_id = ?, image_path = ? , `start_date` = ?, end_date = ?

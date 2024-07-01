@@ -41,11 +41,12 @@ if(isset($_FILES['image'])){
 
 
 
-if(!empty($_POST['course_name']) && !empty($_POST['start_date']) && !empty($_POST['end_date'])){
+if(!empty($_POST['course_name']) && !empty($_POST['start_date']) && !empty($_POST['end_date']) && !empty($_POST['teacher_id'])){
     $course_name = $_POST['course_name'];
     $start_date = $_POST['start_date'];
     $end_date = $_POST['end_date'];
-    $teacher_id = !empty($_POST['teacher_id']) ? $_POST['teacher_id'] : NULL;
+    $teacher_id = $_POST['teacher_id'];
+    // $teacher_id = !empty($_POST['teacher_id']) ? $_POST['teacher_id'] : NULL;
     $image_path = !empty($_POST['image_path']) ? $_POST['image_path'] : '../../media/course_image/default_course_image.jpg';
 
     $sql = "INSERT INTO course (course_name, teacher_id, image_path, `start_date`, end_date) VALUES (?,?,?,?,?)";
