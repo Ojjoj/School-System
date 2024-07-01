@@ -46,18 +46,42 @@ if (isset($_GET["edit"])) {
         echo "Error preparing statement: " . mysqli_error($connection);
     }
 
-    // $sql_teacher_assistant = "SELECT t.teacher_id, t.first_name, t.last_name FROM teacher t INNER JOIN teacher_assistant ta ON t.teacher_id = ta.teacher_id WHERE ta.assistant_id = ?";
-    $sql_teacher_assistant = "SELECT t.teacher_id, t.first_name, t.last_name FROM assistant a, course_assistants ca, course c, teacher t WHERE t.teacher_id = c.teacher_id AND c.course_id = ca.course_id AND ca.assistant_id = a.assistant_id AND a.assistant_id = ?";
-    $stmt_teacher_assistant = mysqli_prepare($connection, $sql_teacher_assistant);
-    if ($stmt_teacher_assistant) {
-        mysqli_stmt_bind_param($stmt_teacher_assistant, 'i', $assistant_id);
-        mysqli_stmt_execute($stmt_teacher_assistant);
-        $result_teacher_assistant = mysqli_stmt_get_result($stmt_teacher_assistant);
+    $sql_course_assistant = "SELECT c.course_id, c.course_name, t.first_name FROM assistant a, course_assistants ca, course c, teacher t WHERE a.assistant_id = ca.assistant_id AND ca.course_id = c.course_id AND c.teacher_id = t.teacher_id AND a.assistant_id = ?";
+    $stmt_course_assistant = mysqli_prepare($connection, $sql_course_assistant);
+    if ($stmt_course_assistant) {
+        mysqli_stmt_bind_param($stmt_course_assistant, 'i', $assistant_id);
+        mysqli_stmt_execute($stmt_course_assistant);
+        $result_course_assistant = mysqli_stmt_get_result($stmt_course_assistant);
     } else {
         echo "Error preparing statement: " . mysqli_error($connection);
     }
 }
 
+if (isset($_GET['delete'])) {
+    $assistant_id = $_GET["edit"];
+    $course_id = $_GET['delete'];
+    $sql = "DELETE FROM course_assistants WHERE course_id = $course_id";
+    mysqli_query($connection, $sql);
+    header("Location: edit_assistant.php?edit=$assistant_id");
+    exit;
+}
+
+if (isset($_POST['submit'])) {
+    $sql = "INSERT INTO `course_assistants` (`course_id`, `assistant_id`) VALUES (?, ?)";
+    $stmt = mysqli_prepare($connection, $sql);
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, 'ii', $course_id, $assistant_id);
+        $course_id = $_POST['course_id'];
+        $success = mysqli_stmt_execute($stmt);
+        if ($success){
+            header("Location: edit_assistant.php?edit=$assistant_id&added=true");
+            exit;
+        }
+        mysqli_stmt_close($stmt);
+    } else {
+        echo "Error preparing statement: " . mysqli_error($connection);
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -122,7 +146,7 @@ include '../include/navbar.php';
                             <div class="table-title">
                                 <div class="row">
                                     <div class="col-sm-8">
-                                        <h2><b>Teachers Assisted</b></h2>
+                                        <h2><b>Course Assigned</b></h2>
                                     </div>
                                 </div>
                             </div>
@@ -130,23 +154,23 @@ include '../include/navbar.php';
                                 <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>First Name</th>
-                                        <th>Last Name</th>
+                                        <th>Course Name</th>
+                                        <th>Teacher Name</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    while ($row = mysqli_fetch_assoc($result_teacher_assistant)) {
-                                        $teacher_id = $row['teacher_id'];
+                                    while ($row = mysqli_fetch_assoc($result_course_assistant)) {
+                                        $course_id = $row['course_id'];
+                                        $course_name = $row['course_name'];
                                         $first_name = $row['first_name'];
-                                        $last_name = $row['last_name'];
                                         echo "<tr>";
-                                        echo "<td>$teacher_id</td>";
+                                        echo "<td>$course_id</td>";
+                                        echo "<td>$course_name</td>";
                                         echo "<td>$first_name</td>";
-                                        echo "<td>$last_name</td>";
                                         echo "<td class='delete-td'>";
-                                        echo '   <a href="edit_assistant.php?edit=' . $assistant_id . '&delete=' . $teacher_id . '" class="delete" title="Delete" name="delete" data-toggle="tooltip" onclick="return confirm(\'Delete this student?\');"><i class="fa-solid fa-trash"></i></a>';
+                                        echo '   <a href="edit_assistant.php?edit=' . $assistant_id . '&delete=' . $course_id . '" class="delete" title="Delete" name="delete" data-toggle="tooltip" onclick="return confirm(\'Remove course assigned?\');"><i class="fa-solid fa-trash"></i></a>';
                                         echo "</td>";
                                         echo "</tr>";
                                     }
@@ -159,37 +183,37 @@ include '../include/navbar.php';
                                 <div class="container mt-3">
                                     <div class="row me-3">
                                         <div class="alert alert-success alert-dismissible fade show <?php echo $alert; ?>" role="alert">
-                                            Teacher was added successfully
+                                            Course was added successfully
                                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                         </div>
                                         <div class="mb-3">
                                             <center>
-                                                <h2>Add Teacher</h2>
+                                                <h2>Add Course</h2>
                                             </center>
                                             <hr>
-                                            <select class="form-select" name="student_id" id="student_id">
-                                                <option value="" selected>Select a teacher</option>
+                                            <select class="form-select" name="course_id" id="course_id">
+                                                <option value="" selected>Select a course</option>
                                                 <?php
-                                                $sql_select_teachers =
-                                                    "SELECT teacher_id, first_name, last_name 
-                                                    FROM teacher    
-                                                    WHERE teacher_id NOT IN (
-                                                        SELECT t.teacher_id 
-                                                        FROM assistant a, course_assistants ca, course c, teacher t 
-                                                        WHERE t.teacher_id = c.teacher_id 
-                                                            AND c.course_id = ca.course_id 
+                                                $sql_select_courses =
+                                                    "SELECT course_id, course_name, first_name
+                                                    FROM course, teacher    
+                                                    WHERE course.teacher_id = teacher.teacher_id
+                                                    AND course_id NOT IN (
+                                                        SELECT c.course_id 
+                                                        FROM assistant a, course_assistants ca, course c 
+                                                        WHERE c.course_id = ca.course_id 
                                                             AND ca.assistant_id = a.assistant_id 
                                                             AND a.assistant_id = ?)";
-                                                $stmt_select_teachers = mysqli_prepare($connection, $sql_select_teachers);
-                                                if ($stmt_select_teachers) {
-                                                    mysqli_stmt_bind_param($stmt_teacher_assistant, 'i', $assistant_id);
-                                                    mysqli_stmt_execute($stmt_select_teachers);
-                                                    $result_select_teachers = mysqli_stmt_get_result($stmt_select_teachers);
-                                                    while ($row_select_teachers = mysqli_fetch_assoc($result_select_teachers)) {
-                                                        $teacher_id = $row_select_teachers['teacher_id'];
-                                                        $first_name = $row_select_teachers['first_name'];
-                                                        $last_name = $row_select_teachers['last_name'];
-                                                        echo "<option value='$teacher_id'>$first_name $last_name</option>";
+                                                $stmt_select_courses = mysqli_prepare($connection, $sql_select_courses);
+                                                if ($stmt_select_courses) {
+                                                    mysqli_stmt_bind_param($stmt_select_courses, 'i', $assistant_id);
+                                                    mysqli_stmt_execute($stmt_select_courses);
+                                                    $result_select_courses = mysqli_stmt_get_result($stmt_select_courses);
+                                                    while ($row_select_courses = mysqli_fetch_assoc($result_select_courses)) {
+                                                        $course_id = $row_select_courses['course_id'];
+                                                        $course_name = $row_select_courses['course_name'];
+                                                        $first_name = $row_select_courses['first_name'];
+                                                        echo "<option value='$course_id'>$course_name ($first_name)</option>";
                                                     }
                                                 } else {
                                                     echo "Error preparing statement: " . mysqli_error($connection);
@@ -200,7 +224,7 @@ include '../include/navbar.php';
                                     </div>
                                 </div>
                                 <center>
-                                    <button type="submit" class="btn btn-primary" name="submit">Add Teacher</button>
+                                    <button type="submit" class="btn btn-primary" name="submit">Add Course</button>
                                 </center>
                             </form>
                         </div>
