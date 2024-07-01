@@ -105,6 +105,7 @@ if (isset($_GET['delete'])) {
     <link href="../../external/fontawesome/css/all.min.css" rel="stylesheet">
     <link href="../../external/fontawesome/css/fontawesome.min.css" rel="stylesheet">
     <link href="../../css/student.css" rel="stylesheet">
+
 </head>
 
 <?php

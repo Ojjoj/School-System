@@ -1,5 +1,5 @@
 <?php
-# include_once '../include/admin_checkout.php';
+include_once '../include/admin_checkout.php';
 include_once '../include/connect.php';
 session_start();
 
