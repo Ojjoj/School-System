@@ -12,21 +12,13 @@
     }
   }
   if(isset($_GET['logout'])){ 
-    session_start(); // Start the session
-    session_unset(); // Unset all session variables
-    session_destroy(); // Destroy the session
+    // session_start(); // Start the session
+    // session_unset(); // Unset all session variables
+    // session_destroy(); // Destroy the session
 
-// Disable caching
-header("Cache-Control: no-cache, no-store, must-revalidate");
-header("Pragma: no-cache");
-header("Expires: 0");
-
-// Redirect to login page
-header("Location:../admin/login.php");
-exit();
-    // session_destroy();
-    // header('location:../admin/login.php');
-    // exit();
+  header("Location:../admin/login.php");
+  exit();
+    
   }
 ?>
 

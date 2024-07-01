@@ -1,11 +1,6 @@
 <?php
 include_once '../include/admin_checkout.php'; 
 
-if($_SESSION['username'] !== 'johndeo@gmail.com'){
-    header("location:admin_profile.php");
-    exit();
-}
-
 //get the admin username
 $username = $_SESSION['username'];
 include_once '../include/connect.php';
@@ -170,7 +165,7 @@ if (isset($_GET['delete'])) {
                     </div>
                 </div>
 
-                <div class="row separator">
+                <div class="row separator" style="margin-top: 30px;">
                     <div class="col-sm-9">
                         <h2>Admins Information</h2>
                     </div>

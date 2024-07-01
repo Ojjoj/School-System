@@ -1,23 +1,17 @@
 <?php
 include_once '../include/admin_checkout.php';
+include_once '../include/connect.php';
 
-if($_SESSION['username'] === 'johndeo@gmail.com'){
-  header("location:dashboard.php");
-  exit();
-} 
-
+$alert1 = 'd-none';
+$alert2 = 'd-none';
+$fail = '';
 $check_password = false;
 
 if(isset($_POST['update'])){
-    include_once '../include/connect.php';
-
     $username = $_SESSION['username'];
-    echo $username;
     $old_password = $_POST['old_password'];
     $new_password = $_POST['new_password'];
-
-    $check_password = false;
-
+        
     $sql = "SELECT id, username, passwrd FROM admins WHERE username = ?";
     if($stmt = mysqli_prepare($connection, $sql)){
         mysqli_stmt_bind_param($stmt, "s", $username);
@@ -30,17 +24,18 @@ if(isset($_POST['update'])){
                     $check_password = true;
                 } 
                 else {
-                    $password_error = "invalid password";
-                    include('admin_profile.php'); 
+                    $alert2 = '';
+                    $fail = 'Old password is incorrect. Please try again.';
                 }       
             } 
             else{
-                $password_error = $username;
-                include('admin_profile.php'); 
+                header("location:admin_profile1.php?error=usernamedoesn'texist");
+                exit();
             }
         } 
         else{
-            echo "Oops! Something went wrong. Please try again later.";
+            header("location:admin_profile1.php?error=stmtfailed");
+            exit();
         }
         mysqli_stmt_close($stmt);
     }
@@ -53,16 +48,17 @@ if($check_password){
     if($stmt = mysqli_prepare($connection, $sql)){
         mysqli_stmt_bind_param($stmt, "ss", $hashed_password,$username);
         if(mysqli_stmt_execute($stmt)){
-            $password_error = "password updated";
-            include('admin_profile.php'); 
+            $alert1='';
         }
         else{
-            echo "Oops! Something went wrong. Please try again later.";
+            $alert2 = '';
+            $fail = 'Oops! Something went wrong. Please try again later.';
         }
     }   
 }
-
 ?>
+
+
 <!DOCTYPE html>
 <head lang="en">
     <title>Admin Profile</title>
@@ -72,52 +68,80 @@ if($check_password){
     <link rel="stylesheet" href="../../external/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="../../external/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="../../external/fontawesome/css/fontawesome.min.css">
-    <link rel="stylesheet" href="../../css/login.css">
+    <link rel="stylesheet" href="../../css/admin.css">
 </head>
-<body>
-    <div class="container">
-      <form action="" method="post" onsubmit="return check_passwords()">
-        
-        <div>
-          <h2>Change Password</h2 >
-          <hr>
-        </div>
+<?php
+    include '../include/navbar.php';
+?>
 
-        <div class="mb-3">
-          <label for="oldpassword" class="form-label">Current Password</label>
-          <div class="password_field">
-            <input type="password" class="form-control" name="old_password" id="old_password">
-            <i class="fa-regular fa-eye password_icon" id="password_icon1" onclick="toggle_password('old_password','password_icon1')"></i>
-          </div>
-          <span id="old_password_error"></span>
-        </div>
-
-        <div class="mb-3">
-          <label for="new_password" class="form-label">New Password</label>
-          <div class="password_field">
-            <input type="password" class="form-control" name="new_password" id="new_password">
-            <i class="fa-regular fa-eye password_icon" id="password_icon2" onclick="toggle_password('new_password','password_icon2')"></i>
-          </div>
-          <span id="new_password_error"></span>
-        </div>
-
-        <div class="mb-3">
-          <label for="confirm_password" class="form-label">Confirm Password</label>
-          <div class="password_field">
-            <input type="password" class="form-control" name="confirm_password" id="confirm_password">
-            <i class="fa-regular fa-eye password_icon" id="password_icon3" onclick="toggle_password('confirm_password','password_icon3')"></i>
-          </div>
-          <span id="confirm_password_error"></span>
-          <span id="matching_password_error"></span>
-          <span><?php if(isset($password_error)) {echo $password_error;} ?></span>
-        </div>
-
-        <div>
-          <button type="submit" name="update" class="btn btn-primary pos">Update</button>
-        </div>
-        
-      </form>
+<body class="body">
+  <div class="row">
+    <div class="col-md-2">
+        <?php  include '../include/sidebar.php';?>
     </div>
+    <div class="col-md-10">
+      <div class="container">
+
+        <div class="success">
+          <div class="alert alert-success alert-dismissible fade show <?php echo $alert1; ?>" role="alert">
+            Password updated successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+
+          <div class="alert alert-danger alert-dismissible fade show <?php echo $alert2; ?>" role="alert" id="warning">
+            <?php echo $fail; ?>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        </div>
+
+        <div class="content">
+          <form action="" method="post" onsubmit="return check_passwords()">
+            
+            <div>
+              <h2>Change Password</h2 >
+              <hr>
+            </div>
+
+            <div class="mb-3">
+              <label for="oldpassword" class="form-label">Current Password</label>
+              <div class="password_field">
+                <input type="password" class="form-control" name="old_password" id="old_password">
+                <i class="fa-regular fa-eye password_icon" id="password_icon1" onclick="toggle_password('old_password','password_icon1')"></i>
+              </div>
+              <span id="old_password_error"></span>
+            </div>
+
+            <div class="mb-3">
+              <label for="new_password" class="form-label">New Password</label>
+              <div class="password_field">
+                <input type="password" class="form-control" name="new_password" id="new_password">
+                <i class="fa-regular fa-eye password_icon" id="password_icon2" onclick="toggle_password('new_password','password_icon2')"></i>
+              </div>
+              <span id="new_password_error"></span>
+            </div>
+
+            <div class="mb-3">
+              <label for="confirm_password" class="form-label">Confirm Password</label>
+              <div class="password_field">
+                <input type="password" class="form-control" name="confirm_password" id="confirm_password">
+                <i class="fa-regular fa-eye password_icon" id="password_icon3" onclick="toggle_password('confirm_password','password_icon3')"></i>
+              </div>
+              <span id="confirm_password_error"></span>
+              <span id="matching_password_error"></span>
+              <span><?php if(isset($password_error)) {echo $password_error;} ?></span>
+            </div>
+
+            <div id="align_button">
+              <button type="submit" class="space btn btn-primary" name="update">Update</button>
+              <button class="btn btn-danger" name="cancel"><a href="dashboard.php" class="cancel">Cancel</a></button>
+            </div>
+            <?php  ?>
+            
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
     
     <script src="../../external/bootstrap/bootstrap.min.js"></script>
     <script src="../../js/admin_profile.js"></script>

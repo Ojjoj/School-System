@@ -1,0 +1,54 @@
+.body{
+    color: #444;
+}
+
+.success{
+    margin: 20px 0 20px 0;
+}   
+
+.content{
+    margin-top: 40px;
+}
+
+.content label{
+    font-size: 20px;
+}
+
+.content form div span{
+    font-size: 16px;
+    color: crimson;
+    display: block;
+}
+
+.password_field{
+    position: relative;
+}
+
+#password_icon, .password_icon{
+    position: absolute;
+    right: 1%;
+    bottom:18%;
+    color:#555;
+    font-size: 21px;
+}
+
+#align_button{
+    margin-top: 20px;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    flex-direction: row;
+}
+
+#align_button button{
+    width: 10%;
+}
+
+.cancel{
+    color: #fff;
+    text-decoration: none;
+}
+
+.space{
+    margin-right: 30px;
+}
