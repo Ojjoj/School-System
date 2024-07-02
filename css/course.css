@@ -118,3 +118,7 @@ body{
     background-color: rgba(246, 246, 246,0.9);
 
 }
+
+::-webkit-scrollbar {
+    width: 0;  
+}

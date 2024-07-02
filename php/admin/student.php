@@ -10,7 +10,7 @@ function calculate_age($dateOfBirth)
     return $age->y;
 }
 
-$studentsPerPage = 3;
+$studentsPerPage = 5;
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 $offset = ($page - 1) * $studentsPerPage;
 

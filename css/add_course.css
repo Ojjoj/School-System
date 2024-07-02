@@ -123,6 +123,12 @@ table i{
     background-color:#3b3b3d;
     cursor: pointer;
 }
+::-webkit-scrollbar {
+    width: 0;  
+}
+.delete {
+    color: #E34724;
+}
 
 
 #align_button{

@@ -1,4 +1,8 @@
 
+::-webkit-scrollbar {
+    width: 0;  
+}
+
 #align_button{
     margin-top: 20px;
     display: flex;

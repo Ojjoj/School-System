@@ -1,9 +1,9 @@
-    <?php
+<?php
 include_once '../include/connect.php';
 include_once '../include/admin_checkout.php';
 
 // course and teacher
-if(isset($_GET['edit_course'])){
+if (isset($_GET['edit_course'])) {
     $course_id = $_GET['edit_course'];
     $assistant = '';
 
@@ -14,12 +14,12 @@ if(isset($_GET['edit_course'])){
 
     if ($stmt = mysqli_prepare($connection, $sql)) {
         mysqli_stmt_bind_param($stmt, "i", $course_id);
-        if(mysqli_stmt_execute($stmt)){
+        if (mysqli_stmt_execute($stmt)) {
             $result = mysqli_stmt_get_result($stmt);
             if (mysqli_num_rows($result) > 0)
                 $data = mysqli_fetch_array($result);
         }
-    } 
+    }
     mysqli_stmt_close($stmt);
 }
 
@@ -31,19 +31,19 @@ WHERE assistant.assistant_id = course_assistants.assistant_id
 AND course_assistants.course_id = ?";
 if ($stmt = mysqli_prepare($connection, $sql)) {
     mysqli_stmt_bind_param($stmt, "i", $course_id);
-    if(mysqli_stmt_execute($stmt)){
+    if (mysqli_stmt_execute($stmt)) {
         $result = mysqli_stmt_get_result($stmt);
         if (mysqli_num_rows($result) > 0)
-            while($row = mysqli_fetch_array($result)){
+            while ($row = mysqli_fetch_array($result)) {
                 $assistants[] = array(
-                    'id' => "assistant".$row['assistant_id'],
+                    'id' => "assistant" . $row['assistant_id'],
                     'full_name' => $row['first_name'] . ' ' . $row['last_name']
-                );  
+                );
             }
     }
 }
 mysqli_stmt_close($stmt);
- 
+
 
 // students
 $students = [];
@@ -53,14 +53,14 @@ WHERE student.student_id = course_students.student_id
 AND course_students.course_id = ?";
 if ($stmt = mysqli_prepare($connection, $sql)) {
     mysqli_stmt_bind_param($stmt, "i", $course_id);
-    if(mysqli_stmt_execute($stmt)){
+    if (mysqli_stmt_execute($stmt)) {
         $result = mysqli_stmt_get_result($stmt);
         if (mysqli_num_rows($result) > 0)
-            while($row = mysqli_fetch_array($result)){
+            while ($row = mysqli_fetch_array($result)) {
                 $students[] = array(
-                    'id' => "student".$row['student_id'],
+                    'id' => "student" . $row['student_id'],
                     'full_name' => $row['first_name'] . ' ' . $row['last_name']
-                );  
+                );
             }
     }
 }
@@ -92,15 +92,15 @@ include '../include/navbar.php';
             <?php include '../include/sidebar.php'; ?>
         </div>
         <div class="col-md-10" style="margin: 30px 0 10px 0;">
-        <div id='success' class="alert alert-success alert-dismissible fade show" style="display: none;" role="alert" style="width:99%;">
-            course updated successfully!
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+            <div id='success' class="alert alert-success alert-dismissible fade show" style="display: none;" role="alert" style="width:99%;">
+                course updated successfully!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
 
-        <div id='fail' class="alert alert-danger alert-dismissible fade show" style="display: none;" role="alert" style="width:99%;">
-            Failed to update the course. Please try again.
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
+            <div id='fail' class="alert alert-danger alert-dismissible fade show" style="display: none;" role="alert" style="width:99%;">
+                Failed to update the course. Please try again.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
 
             <form action="" method="POST" enctype="multipart/form-data">
                 <h2>Course Information</h2>
@@ -120,7 +120,7 @@ include '../include/navbar.php';
                             <input type="date" class="form-control" id="end_date" name="end_date" value="<?php echo $data['end_date'] ?>" required>
                         </div>
                     </div>
-                    <div class="col-md-6 col-sm-12 image_div" >
+                    <div class="col-md-6 col-sm-12 image_div">
                         <div class="card" style="height: 200px; width:300px;">
                             <img src='<?php echo $data['image_path']; ?>' id="course_image">
                         </div>
@@ -135,7 +135,7 @@ include '../include/navbar.php';
                     <div class="col-md-6 col-sm-12">
                         <label class="form-label" for="select_teacher">Choose Teacher</label>
                         <div class="teacher">
-                            <input type="text" class="form-control <?php echo "teacher".$data['teacher_id']?>" id="select_teacher" name="select_teacher" value='<?php echo $data['first_name'].' '.$data['last_name'] ; ?>' placeholder="select a teacher">
+                            <input type="text" class="form-control <?php echo "teacher" . $data['teacher_id'] ?>" id="select_teacher" name="select_teacher" value='<?php echo $data['first_name'] . ' ' . $data['last_name']; ?>' placeholder="select a teacher">
                             <div class="select" id="select_teacher_options"></div>
                         </div>
                     </div>
@@ -152,7 +152,7 @@ include '../include/navbar.php';
                         </div>
                         <div id="selected_assistant"></div>
                     </div>
-                </div>             
+                </div>
 
                 <h2>Add Student</h2>
                 <hr>
@@ -192,19 +192,20 @@ include '../include/navbar.php';
 
     <script id="course_id">
         <?php echo $_GET['edit_course']; ?>
-    </script> 
+    </script>
 
     <script id="assistants-data">
         <?php echo json_encode($assistants); ?>
-    </script> 
+    </script>
 
     <script id="students-data">
         <?php echo json_encode($students); ?>
-    </script> 
-    
+    </script>
+
     <script src="../../external/bootstrap/bootstrap.min.js"></script>
     <script src="../../js/edit_course.js"></script>
     <script src="../../external/jquery/jquery-3.7.1.min.js"></script>
     <script src="../../js/live_search.js"></script>
-    </body>
+</body>
+
 </html>
