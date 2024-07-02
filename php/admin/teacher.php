@@ -2,7 +2,7 @@
 include_once '../include/admin_checkout.php';
 include_once '../include/connect.php';
 
-$teachersPerPage = 10;
+$teachersPerPage = 5;
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? $_GET['page'] : 1;
 $offset = ($page - 1) * $teachersPerPage;
 
