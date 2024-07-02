@@ -58,9 +58,9 @@
       }
       .h1{
         font-size: 39px;
-        margin-left: 19px;
-        margin-top: 0;
-        margin-bottom: 0;
+        margin-left: 19px !important;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
         font-family: cursive;
       }
     </style>
