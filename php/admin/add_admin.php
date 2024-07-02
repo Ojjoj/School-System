@@ -121,7 +121,7 @@ include '../include/navbar.php';
 
             <div id="align_button">
               <button type="submit" class="space btn btn-primary" name="add">Add</button>
-              <button class="btn btn-danger" name="cancel"><a href="main_admin_profile.php" class="cancel">Cancel</a></button>
+              <a class="btn btn-danger cancel" name="cancel" href="main_admin_profile.php">Cancel</a>
             </div>
           </form>
         </div>

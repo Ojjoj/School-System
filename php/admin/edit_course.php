@@ -184,8 +184,8 @@ include '../include/navbar.php';
                 </div>             
                 <div id="align_button">
                     <button type="submit" class="space btn btn-primary" name="update_course" onclick="update_database(event)">Update</button>
-                    <button class="btn btn-danger" name="cancel"><a href="course.php" class="cancel">Cancel</a></button>
-                </div>
+                    <a class="btn btn-danger cancel" name="cancel" href="course.php">Cancel</a>
+                    </div>
             </form>
         </div>
     </div>

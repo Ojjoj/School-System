@@ -163,6 +163,9 @@ include '../include/navbar.php';
                         </tbody>
                     </table>
                 </div>
+                <div id="align_button">
+                    <a class="btn btn-primary cancel" name="cancel" href="course.php">Back to Courses</a>
+                </div>
             </div>
         </div>
     </div>

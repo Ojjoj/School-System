@@ -122,7 +122,7 @@ include '../include/navbar.php';
                 
             <div id="align_button">
               <button type="submit" class="space btn btn-primary" name="add_course" onclick="save_to_database(event)">Add</button>
-              <button class="btn btn-danger" name="cancel"><a href="course.php" class="cancel">Cancel</a></button>
+              <a class="btn btn-danger cancel" name="cancel" href="course.php">Cancel</a>
             </div>
             </form>
         </div>

@@ -46,3 +46,21 @@ body {
 ::-webkit-scrollbar {
     width: 0;  
 }
+
+#align_button{
+    margin-top: 20px;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    flex-direction: row;
+}
+
+#align_button a{
+    width: fit-content;
+}
+
+.cancel{
+    color: #fff;
+    text-decoration: none;
+}
+ 

@@ -139,7 +139,7 @@ table i{
     flex-direction: row;
 }
 
-#align_button button{
+#align_button button, #align_button a{
     width: 10%;
 }
 
